@@ -418,6 +418,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	char buf[512];
 	int len;
 
+	static const Core::igMetaObject* dotnetObjectType        = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetMetaObject");
 	static const Core::igMetaObject* dynamicObjectType       = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaObject");
 	static const Core::igMetaObject* dataListMetaObject      = Core::igArkCore_getObjectMeta(ArkCore, "igDataList");
 	static const Core::igMetaObject* objectListMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igObjectList");
@@ -534,6 +535,28 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	{
 		writer.WriteText(16, "\t\t</metafields>\n");
 	}
+
+#if TARGET_GAME >= SKYIM_01_00_00 // Issue #3 - Add exposed dotnet field info
+	// Extra dotnet data
+	if (meta->getMeta()->isOfType(dotnetObjectType))
+	{
+		DotNet::igDotNetMetaObject* dotnetMeta = reinterpret_cast<DotNet::igDotNetMetaObject*>(meta);
+		const char** cppFieldNames = reinterpret_cast<const char**>(dotnetMeta->_cppFieldNames);
+		const char** dnFieldNames = reinterpret_cast<const char**>(dotnetMeta->_dotNetFieldNames);
+
+		writer.WriteText(17, "\t\t<dotnetfields>\n");
+		for (int32_t i = 0; i < dotnetMeta->_exposedFieldCount; i++)
+		{
+			WriteFormattedTextIndented(writer,
+			                           3,
+			                           "<field cppName=\"%s\" dnName=\"%s\"/>\n",
+			                           cppFieldNames[i],
+			                           dnFieldNames[i]);
+		}
+		writer.WriteText(18, "\t\t</dotnetfields>\n");
+	}
+#endif // TARGET_GAME >= SKYIM_01_00_00
+
 
 	// Only check the direct parent, otherwise array metafields will cause trouble
 	if (meta->_parent == compoundFieldMetaObject)
