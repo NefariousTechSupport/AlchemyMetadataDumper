@@ -59,6 +59,7 @@ namespace Core
 			return string;
 		}
 		DefineVirtualFunc_0(0x16, igMetaField*, getGenericMetaField);
+		DefineVirtualFunc_0(0x1F, uint32_t, computeSize);
 		DefineVirtualFunc_1(0x20, uint32_t, computePlatformSize, int32_t, platform);
 		DefineVirtualFunc_0(0x23, uint32_t, computeRequiredAlignment);
 		DefineVirtualFunc_1(0x24, uint32_t, computePlatformAlignment, int32_t, platform);
@@ -148,5 +149,15 @@ namespace Core
 		uint16_t _typeSize;
 		void* _cppConstructor;
 		void* _cppDestructor;
+	};
+
+	class igVectorMetaField : public igRefMetaField
+	{
+	public:
+		igMetaField* _memType;
+		igMetaField* _memTypeRef;
+		int32_t _memTypeAlignment;
+		igMetaObject* _elementType;
+		int32_t _initialCapacity;
 	};
 }

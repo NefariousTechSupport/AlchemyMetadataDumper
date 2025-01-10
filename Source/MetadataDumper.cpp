@@ -134,6 +134,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	static const Core::igMetaObject* propertyMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igPropertyFieldMetaField");
 	static const Core::igMetaObject* ucharMetaObject        = Core::igArkCore_getObjectMeta(ArkCore, "igUnsignedCharMetaField");
 	static const Core::igMetaObject* structMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStructMetaField");
+	static const Core::igMetaObject* vectorMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igVectorMetaField");
 
 	//_igReportPrintf("memref is null? %d \n", memRefMetaObject == nullptr ? 1 : 0);
 
@@ -264,6 +265,32 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (fieldType->isOfType(structMetaObject))
 	{
 		WriteFormattedText(writer, " typeSize=\"0x%02X\" align=\"0x%02X\"", ((Core::igStructMetaField*)metafield)->_typeSize, metafield->computeRequiredAlignment());
+	}
+
+	if (fieldType->isOfType(vectorMetaObject))
+	{
+		Core::igVectorMetaField* vectorMetaField = (Core::igVectorMetaField*)metafield;
+		int32_t memTypeAlign = vectorMetaField->_memTypeAlignment;
+		if (memTypeAlign > 0)
+		{
+			Core::igObject* templateParam = metafield->getTemplateParameter(0);
+			uint32_t memTypeSize;
+			if (templateParam->getMeta()->isOfType(metaFieldMetaObject))
+			{
+				memTypeSize = reinterpret_cast<Core::igMetaField*>(templateParam)->computeSize();
+			}
+			else
+			{
+				// it's an igObjectRefMetaField
+				memTypeSize = sizeof(Core::igObject*);
+			}
+			WriteFormattedText(writer, " memTypeAlignmentMultiple=\"0x%02X\"", memTypeAlign / memTypeSize);
+		}
+
+		if (vectorMetaField->_initialCapacity > 0)
+		{
+			WriteFormattedText(writer, " initialCapacity=\"%d\"", vectorMetaField->_initialCapacity);
+		}
 	}
 
 	// Check for array metafields
