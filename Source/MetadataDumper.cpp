@@ -192,6 +192,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (!metafield->_properties._implicitAlignment)
 	{
 		writer.WriteText(26, " implicitAlignment=\"false\"");
+		WriteFormattedText(writer, " requiredAlignment=\"%d\"", metafield->computeRequiredAlignment());
 	}
 
 
