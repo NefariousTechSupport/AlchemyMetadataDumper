@@ -100,9 +100,6 @@
 		<ClCompile Include="prx.cpp">
 			<Filter>Source Files</Filter>
 		</ClCompile>
-		<ClCompile Include="Source/SuperChargers_1_6_0_Addresses.cpp">
-			<Filter>Source Files\Addresses</Filter>
-		</ClCompile>
 		<ClCompile Include="../../Source/asserts.cpp">
 			<Filter>Source Files</Filter>
 		</ClCompile>
@@ -115,8 +112,11 @@
 		<ClCompile Include="../../Source/igMetaField.cpp">
 			<Filter>Source Files</Filter>
 		</ClCompile>
-		<ClCompile Include="Source/Imaginators_1_1_0_Addresses.cpp">
-			<Filter>Source Files\Addresses</Filter>
+		<ClCompile Include="Imaginators_1_1_0_Addresses.cpp">
+			<Filter>Source Files</Filter>
+		</ClCompile>
+		<ClCompile Include="SuperChargers_1_6_0_Addresses.cpp">
+			<Filter>Source Files</Filter>
 		</ClCompile>
 	</ItemGroup>
 </Project>
