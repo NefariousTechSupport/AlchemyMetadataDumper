@@ -544,16 +544,19 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 		const char** cppFieldNames = reinterpret_cast<const char**>(dotnetMeta->_cppFieldNames);
 		const char** dnFieldNames = reinterpret_cast<const char**>(dotnetMeta->_dotNetFieldNames);
 
-		writer.WriteText(17, "\t\t<dotnetfields>\n");
-		for (int32_t i = 0; i < dotnetMeta->_exposedFieldCount; i++)
+		if (dotnetMeta->_exposedFieldCount > 0)
 		{
-			WriteFormattedTextIndented(writer,
-			                           3,
-			                           "<field cppName=\"%s\" dnName=\"%s\"/>\n",
-			                           cppFieldNames[i],
-			                           dnFieldNames[i]);
+			writer.WriteText(17, "\t\t<dotnetfields>\n");
+			for (int32_t i = 0; i < dotnetMeta->_exposedFieldCount; i++)
+			{
+				WriteFormattedTextIndented(writer,
+										3,
+										"<field cppName=\"%s\" dnName=\"%s\"/>\n",
+										cppFieldNames[i],
+										dnFieldNames[i]);
+			}
+			writer.WriteText(18, "\t\t</dotnetfields>\n");
 		}
-		writer.WriteText(18, "\t\t</dotnetfields>\n");
 	}
 #endif // TARGET_GAME >= SKYIM_01_00_00
 
