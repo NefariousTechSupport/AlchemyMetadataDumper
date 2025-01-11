@@ -45,7 +45,7 @@ void DumpMetaEnums()
 
 	Core::igMetaObject* dynamicMetaEnumType = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaEnum");
 
-	FileWriter writer = FileWriter(FILE_PREFIX "metaenums.xml");
+	FileWriter writer = FileWriter("metaenums.xml");
 
 	writer.WriteText(12, "<metaenums>\n");
 
@@ -83,7 +83,7 @@ void DumpMetaFieldList()
 	char buf[512];
 	int len;
 
-	FileWriter writer = FileWriter(FILE_PREFIX "metafields.xml");
+	FileWriter writer = FileWriter("metafields.xml");
 	writer.WriteText(13, "<metafields>\n");
 
 	for (int t = 0; t < ArkCoreMetaFieldList->_count; t++)
@@ -609,7 +609,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 
 void DumpMetaObjects()
 {
-	FileWriter writer = FileWriter(FILE_PREFIX "metaobjects.xml");
+	FileWriter writer = FileWriter("metaobjects.xml");
 	writer.WriteText(14, "<metaobjects>\n");
 
 	Core::igMemory<Core::igMetaObject*>& metaObjects = ArkCore->_metaObjectHashTable->_values;

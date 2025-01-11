@@ -1,11 +1,5 @@
 #pragma once
 
-#if TARGET_PS3
-#define FILE_PREFIX "/dev_hdd0/tmp/"
-#else
-#error "unsupported platform"
-#endif // TARGET_PS3
-
 // extra level of indirection to so the line number is used,
 // otherwise __LINE__ would be tokenized
 #define WriteFormattedTextConcat_(a, b) a ## b
@@ -37,5 +31,9 @@ public:
 	int WriteTextf(int n, const char* fmt, ...);
 
 private:
+	void platformOpenFile(const char* filepath);
+	void platformTruncateFile(const char* filepath);
+	void platformCloseHandle();
+	int32_t platformWriteFile(uint8_t* data, int32_t len);
 	int _handle;
 };
