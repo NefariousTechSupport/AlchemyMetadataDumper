@@ -98,7 +98,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="../../Source/Addresses.h" />
-    <ClInclude Include="../../Source/AddressMacros.h" />
+    <ClInclude Include="../../Source/AddressUtils.h" />
     <ClInclude Include="../../Source/Constants.h" />
     <ClInclude Include="../../Source/cpp11hacks.hpp" />
     <ClInclude Include="../../Source/cpp11hacks_static_assert.hpp" />

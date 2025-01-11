@@ -20,13 +20,10 @@
 		<ClInclude Include="stdafx.h">
 			<Filter>Header Files</Filter>
 		</ClInclude>
-		<ClInclude Include="../../Source/AddressMacros.h">
+		<ClInclude Include="../../Source/AddressUtils.h">
 			<Filter>Header Files\Addresses</Filter>
 		</ClInclude>
 		<ClInclude Include="../../Source/Addresses.h">
-			<Filter>Header Files\Addresses</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/TocDefinition.h">
 			<Filter>Header Files\Addresses</Filter>
 		</ClInclude>
 		<ClInclude Include="../../Source/igObject.hpp">
@@ -64,9 +61,6 @@
 		</ClInclude>
 		<ClInclude Include="../../Source/MetadataDumper.hpp">
 			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/Constants.h">
-			<Filter>Header Files\Addresses</Filter>
 		</ClInclude>
 		<ClInclude Include="../../Source/Games.h">
 			<Filter>Header Files\Addresses</Filter>

@@ -5,4 +5,7 @@
 
 #pragma once
 
+#include "Defines.h"
+#include "Games.h"
+
 #pragma hdrstop

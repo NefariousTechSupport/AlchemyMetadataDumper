@@ -4,11 +4,7 @@
 
 #include "cpp11hacks.hpp"
 
-#if TARGET_CAFE
-#error "Unimplemented!!"
-#else
-#define GetVirtualFunc(vtable, index) (((void**)vtable)[index])
-#endif // TARGET_CAFE
+#include "AddressUtils.h"
 
 #define CallVirtualFunc_0(index, ret) ((ret(*)(__internalObjectBase*))GetVirtualFunc(_vTable, index))(this)
 #define CallVirtualFunc_0_c(index, ret) ((ret(*)(const __internalObjectBase*))GetVirtualFunc(_vTable, index))(this)
