@@ -1,5 +1,8 @@
 #pragma once
 
+
+#include <stdint.h>
+
 // extra level of indirection to so the line number is used,
 // otherwise __LINE__ would be tokenized
 #define WriteFormattedTextConcat_(a, b) a ## b
@@ -34,6 +37,6 @@ private:
 	void platformOpenFile(const char* filepath);
 	void platformTruncateFile(const char* filepath);
 	void platformCloseHandle();
-	int32_t platformWriteFile(uint8_t* data, int32_t len);
+	int32_t platformWriteFile(const char* data, int32_t len);
 	int _handle;
 };

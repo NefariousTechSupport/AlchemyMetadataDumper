@@ -118,6 +118,7 @@
     <ClInclude Include="../../Source/igStringRef.hpp" />
     <ClInclude Include="../../Source/igVector.hpp" />
     <ClInclude Include="../../Source/MetadataDumper.hpp" />
+    <ClInclude Include="PS3AddressUtils.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="../../Source/__internalObjectBase.hpp" />
   </ItemGroup>
@@ -128,6 +129,8 @@
     <ClCompile Include="Imaginators_1_1_0_Addresses.cpp" />
     <ClCompile Include="../../Source/MetadataDumper.cpp" />
     <ClCompile Include="prx.cpp" />
+    <ClCompile Include="PS3Common.cpp" />
+    <ClCompile Include="PS3fileio.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|PS3'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugSuperchargers1_6_0|PS3'">Create</PrecompiledHeader>

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdint.h>
+
 // Declares a method signature
 #define DeclareMethod(ret, name, ...) \
 extern ret(*name)(__VA_ARGS__)

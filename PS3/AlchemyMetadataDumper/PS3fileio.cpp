@@ -1,6 +1,7 @@
 #include "fileio.hpp"
 
 #include <cell/fs/cell_fs_file_api.h>
+#include <stdint.h>
 
 #include "Addresses.h"
 
@@ -23,7 +24,7 @@ void FileWriter::platformTruncateFile(const char* filepath)
 	char prefixedPath[255];
 	__stubs::__sprintf(prefixedPath, FILE_PREFIX "%s", filepath);
 
-	cellFsTruncate(filepath, 0);
+	cellFsTruncate(prefixedPath, 0);
 }
 
 void FileWriter::platformCloseHandle()
@@ -31,10 +32,10 @@ void FileWriter::platformCloseHandle()
 	cellFsClose(_handle);
 }
 
-int32_t FileWriter::platformWriteFile(uint8_t* data, int32_t len)
+int32_t FileWriter::platformWriteFile(const char* data, int32_t len)
 {
 	uint64_t written = 0;
-	cellFsWrite(_handle, text, len, &written);
+	cellFsWrite(_handle, data, len, &written);
 	return written;
 }
 

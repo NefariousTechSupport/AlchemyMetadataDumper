@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstdint>
+#include <stdint.h>
 
 #ifndef PS3_TOC_BASE
 #error "You must define PS3_TOC_BASE before including PS3AddressUtils.hpp, please do so on the line before"

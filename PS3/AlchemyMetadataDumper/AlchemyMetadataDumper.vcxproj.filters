@@ -1,116 +1,128 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-		<Filter Include="Source Files">
-			<UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-			<Extensions>cpp;c;cxx;cc;s;asm</Extensions>
-		</Filter>
-		<Filter Include="Header Files">
-			<UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-			<Extensions>h;hpp</Extensions>
-		</Filter>
-		<Filter Include="Header Files\Addresses">
-			<UniqueIdentifier>{579ee77b-edbd-4f97-92cc-e8bec9e43eeb}</UniqueIdentifier>
-		</Filter>
-		<Filter Include="Source Files\Addresses">
-			<UniqueIdentifier>{90b9a06f-61c3-4480-a59c-0fd6fd3a58ec}</UniqueIdentifier>
-		</Filter>
-	</ItemGroup>
-	<ItemGroup>
-		<ClInclude Include="stdafx.h">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/AddressUtils.h">
-			<Filter>Header Files\Addresses</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/Addresses.h">
-			<Filter>Header Files\Addresses</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igObject.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/__internalObjectBase.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igContainer.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igDataList.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igMemory.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igObjectList.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igMetaObject.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igBaseMeta.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igVector.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igMetaField.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igMetaEnum.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/MetadataDumper.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/Games.h">
-			<Filter>Header Files\Addresses</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igArkCore.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igHashTable.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/cpp11hacks.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/fileio.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/cpp11hacks_static_assert.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/Defines.h">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-		<ClInclude Include="../../Source/igStringRef.hpp">
-			<Filter>Header Files</Filter>
-		</ClInclude>
-	</ItemGroup>
-	<ItemGroup>
-		<ClCompile Include="stdafx.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-		<ClCompile Include="prx.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-		<ClCompile Include="../../Source/asserts.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-		<ClCompile Include="../../Source/MetadataDumper.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-		<ClCompile Include="../../Source/fileio.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-		<ClCompile Include="../../Source/igMetaField.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-		<ClCompile Include="Imaginators_1_1_0_Addresses.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-		<ClCompile Include="SuperChargers_1_6_0_Addresses.cpp">
-			<Filter>Source Files</Filter>
-		</ClCompile>
-	</ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;cc;s;asm</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Addresses">
+      <UniqueIdentifier>{579ee77b-edbd-4f97-92cc-e8bec9e43eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PS3">
+      <UniqueIdentifier>{34077627-c855-4859-a585-96f107732d80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Addresses">
+      <UniqueIdentifier>{7fd0e621-3769-419c-87f7-19e030d8200a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/AddressUtils.h">
+      <Filter>Header Files\Addresses</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/Addresses.h">
+      <Filter>Header Files\Addresses</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/__internalObjectBase.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igContainer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igDataList.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igMemory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igObjectList.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igMetaObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igBaseMeta.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igVector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igMetaField.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igMetaEnum.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/MetadataDumper.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/Games.h">
+      <Filter>Header Files\Addresses</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igArkCore.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igHashTable.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/cpp11hacks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/fileio.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/cpp11hacks_static_assert.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/Defines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="../../Source/igStringRef.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PS3AddressUtils.hpp">
+      <Filter>Header Files\Addresses</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="prx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../../Source/asserts.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../../Source/MetadataDumper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../../Source/fileio.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="../../Source/igMetaField.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PS3Common.cpp">
+      <Filter>Source Files\PS3</Filter>
+    </ClCompile>
+    <ClCompile Include="Imaginators_1_1_0_Addresses.cpp">
+      <Filter>Source Files\Addresses</Filter>
+    </ClCompile>
+    <ClCompile Include="SuperChargers_1_6_0_Addresses.cpp">
+      <Filter>Source Files\Addresses</Filter>
+    </ClCompile>
+    <ClCompile Include="PS3fileio.cpp">
+      <Filter>Source Files\PS3</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>
