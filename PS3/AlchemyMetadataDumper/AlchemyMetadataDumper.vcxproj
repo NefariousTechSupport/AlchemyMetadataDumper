@@ -99,7 +99,6 @@
   <ItemGroup>
     <ClInclude Include="../../Source/Addresses.h" />
     <ClInclude Include="../../Source/AddressUtils.h" />
-    <ClInclude Include="../../Source/Constants.h" />
     <ClInclude Include="../../Source/cpp11hacks.hpp" />
     <ClInclude Include="../../Source/cpp11hacks_static_assert.hpp" />
     <ClInclude Include="../../Source/Defines.h" />
@@ -120,7 +119,6 @@
     <ClInclude Include="../../Source/igVector.hpp" />
     <ClInclude Include="../../Source/MetadataDumper.hpp" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="../../Source/TocDefinition.h" />
     <ClInclude Include="../../Source/__internalObjectBase.hpp" />
   </ItemGroup>
   <ItemGroup>
