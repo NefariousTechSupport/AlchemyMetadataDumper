@@ -8,6 +8,7 @@ Global
 		Debug|PS3 = Debug|PS3
 		DebugImaginators1_1_0|PS3 = DebugImaginators1_1_0|PS3
 		DebugSuperchargers1_6_0|PS3 = DebugSuperchargers1_6_0|PS3
+		DebugTrapTeam1_1_0|PS3 = DebugTrapTeam1_1_0|PS3
 		Release|PS3 = Release|PS3
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
@@ -17,6 +18,8 @@ Global
 		{5C1B5A27-78F3-4576-886F-8CA985AE4F4C}.DebugImaginators1_1_0|PS3.Build.0 = DebugImaginators1_1_0|PS3
 		{5C1B5A27-78F3-4576-886F-8CA985AE4F4C}.DebugSuperchargers1_6_0|PS3.ActiveCfg = DebugSuperchargers1_6_0|PS3
 		{5C1B5A27-78F3-4576-886F-8CA985AE4F4C}.DebugSuperchargers1_6_0|PS3.Build.0 = DebugSuperchargers1_6_0|PS3
+		{5C1B5A27-78F3-4576-886F-8CA985AE4F4C}.DebugTrapTeam1_1_0|PS3.ActiveCfg = DebugTrapTeam1_1_0|PS3
+		{5C1B5A27-78F3-4576-886F-8CA985AE4F4C}.DebugTrapTeam1_1_0|PS3.Build.0 = DebugTrapTeam1_1_0|PS3
 		{5C1B5A27-78F3-4576-886F-8CA985AE4F4C}.Release|PS3.ActiveCfg = Release|PS3
 		{5C1B5A27-78F3-4576-886F-8CA985AE4F4C}.Release|PS3.Build.0 = Release|PS3
 	EndGlobalSection

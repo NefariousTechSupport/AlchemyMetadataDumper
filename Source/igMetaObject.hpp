@@ -23,7 +23,12 @@ namespace Core
 		uint16_t _requiredAlignment;
 		igTVector<void*> _metaFunctions;
 		igObjectList* _attributes;
+#if TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
+		int16_t _id;
+		int16_t _tfbID;
+#else
 		int32_t _id;
+#endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
 
 		inline bool isOfType(const igMetaObject* other) const
 		{

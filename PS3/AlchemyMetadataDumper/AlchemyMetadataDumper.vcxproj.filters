@@ -124,5 +124,8 @@
     <ClCompile Include="PS3fileio.cpp">
       <Filter>Source Files\PS3</Filter>
     </ClCompile>
+    <ClCompile Include="TrapTeam_1_1_0_Addresses.cpp">
+      <Filter>Source Files\Addresses</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -14,7 +14,7 @@ namespace Core
 	class igArkCore
 	{
 	private:
-#if TARGET_PS3 && TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
+#if TARGET_PS3 && TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
 		uint8_t _unk00[0x24];
 #else
 #error "unsupported platform or game!"

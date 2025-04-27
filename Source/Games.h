@@ -16,6 +16,10 @@
   +                         (Minor * 100)  \
   +                               (Patch)) 
 
+// Skylanders Trap Team
+#define SKYTT_01_00_00     GameCode(2014, 10,  2,  1,  0,  0)
+#define SKYTT_01_01_00     GameCode(2014, 10,  2,  1,  1,  0)
+
 // Skylanders SuperChargers
 #define SKYSC_01_00_00     GameCode(2015,  9, 20,  1,  0,  0)
 #define SKYSC_01_02_02     GameCode(2015,  9, 20,  1,  2,  2)

@@ -446,18 +446,15 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	char buf[512];
 	int len;
 
-	static const Core::igMetaObject* dotnetObjectType        = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetMetaObject");
-	static const Core::igMetaObject* dynamicObjectType       = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaObject");
-	static const Core::igMetaObject* dataListMetaObject      = Core::igArkCore_getObjectMeta(ArkCore, "igDataList");
-	static const Core::igMetaObject* objectListMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igObjectList");
-	static const Core::igMetaObject* nrcObjectListMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "igNonRefCountedObjectList");
-	static const Core::igMetaObject* hashTableMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igHashTable");
-	static const Core::igMetaObject* compoundFieldMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "igCompoundMetaField");
-
-	if (!dynamicObjectType)
-	{
-		_igReportPrintf("AAAAAA\n");
-	}
+	static const Core::igMetaObject* dotnetObjectType           = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetMetaObject");
+	static const Core::igMetaObject* dynamicObjectType          = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaObject");
+	static const Core::igMetaObject* dataListMetaObject         = Core::igArkCore_getObjectMeta(ArkCore, "igDataList");
+	static const Core::igMetaObject* objectListMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igObjectList");
+	static const Core::igMetaObject* nrcObjectListMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igNonRefCountedObjectList");
+	static const Core::igMetaObject* hashTableMetaObject        = Core::igArkCore_getObjectMeta(ArkCore, "igHashTable");
+	static const Core::igMetaObject* compoundFieldMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igCompoundMetaField");
+	static const Core::igMetaObject* scriptGroupStackMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "ScriptGroupStack");
+	static const Core::igMetaObject* rhsValueStackMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "RHSValueStack");
 
 	// Lots of types are generated from VVL scripts, this filters them
 	// out. If you wanna get that type information you should parse the
@@ -469,12 +466,12 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	}
 
 	// Hack to let us dump metaobjects such that base types are dumped first
-	// this makes the game crash shortly after the metadata dumper finishes running
-	if (meta->_instanceCount < 0)
+	// No object should have a size that's not aligned to a pointer so yeah
+	if (meta->_sizeofSize & 1)
 	{
 		return;
 	}
-	meta->_instanceCount = -20000000;
+	meta->_sizeofSize |= 1;
 	if (meta->_parent != nullptr)
 	{
 		DumpMetaObject(writer, meta->_parent);
@@ -520,12 +517,27 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 		if ((meta->isOfType(objectListMetaObject)    && meta != objectListMetaObject)
 			|| (meta->isOfType(nrcObjectListMetaObject) && meta != nrcObjectListMetaObject))
 		{
-			// This calls getElementType, which returns the igMetaObject
-			// of the object this list contains
-			//
-			// the _data field of this igObjectList claims that the memory
-			// contains igObjects, rather than the actual element type.
-			Core::igMetaObject* elementType = ((Core::igMetaObject*(*)(Core::igObjectList* thisPtr))GetVirtualFunc(meta->_vTablePointer, 0x1C))(0);
+			Core::igMetaObject* elementType = 0;
+
+			// These will crash if you call getElementType as they actually reference
+			// member variables, instead just hardcode them to the common base object
+			if (meta->isOfType(rhsValueStackMetaObject))
+			{
+				elementType = Core::igArkCore_getObjectMeta(ArkCore, "AbstractScriptVariant");
+			}
+			else if (meta->isOfType(scriptGroupStackMetaObject))
+			{
+				elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbScriptObject");
+			}
+			else
+			{
+				// This calls getElementType, which returns the igMetaObject
+				// of the object this list contains
+				//
+				// the _data field of this igObjectList claims that the memory
+				// contains igObjects, rather than the actual element type.
+				elementType = ((Core::igMetaObject*(*)(Core::igObjectList*))GetVirtualFunc(meta->_vTablePointer, Core::igObjectList::kVTIndexGetElementType))(0);
+			}
 
 			WriteFormattedTextIndented(writer, 2, "<objectlist elementtype=\"%s\"/>\n", elementType->_name);
 		}
@@ -538,8 +550,8 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			Core::igMemoryRefMetaField* valuesField = (Core::igMemoryRefMetaField*)meta->_metaFields.get(0);
 			Core::igMemoryRefMetaField* keysField   = (Core::igMemoryRefMetaField*)meta->_metaFields.get(1);
 
-			void* invalidValue = ((Core::igMetaObject*(*)(Core::igContainer* thisPtr))GetVirtualFunc(meta->_vTablePointer, 0x1E))(0);
-			void* invalidKey = ((Core::igMetaObject*(*)(Core::igContainer* thisPtr))GetVirtualFunc(meta->_vTablePointer, 0x1B))(0);
+			void* invalidKey   = ((Core::igMetaObject*(*)(Core::igContainer*))GetVirtualFunc(meta->_vTablePointer, Core::igTUHashTable<void*, void*>::kVTIndexKeyTraitsInvalid))(0);
+			void* invalidValue = ((Core::igMetaObject*(*)(Core::igContainer*))GetVirtualFunc(meta->_vTablePointer, Core::igTUHashTable<void*, void*>::kVTIndexValueTraitsInvalid))(0);
 
 			WriteFormattedTextIndented(writer,
 										2,
@@ -594,7 +606,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	{
 		writer.WriteText(19, "\t\t<compoundfields>\n");
 
-		Core::igCompoundMetaField* genericCompound = ((Core::igCompoundMetaField*(*)(Core::igMetaField*))GetVirtualFunc(meta->_vTablePointer, 0x16))(0);
+		Core::igCompoundMetaField* genericCompound = ((Core::igCompoundMetaField*(*)(Core::igMetaField*))GetVirtualFunc(meta->_vTablePointer, Core::igCompoundMetaField::kVTIndexGetGenericMetaField))(0);
 
 		for (int i = 0; i < genericCompound->_fieldList->_count; i++)
 		{
