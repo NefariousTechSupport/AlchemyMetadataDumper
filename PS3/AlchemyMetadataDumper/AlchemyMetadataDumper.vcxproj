@@ -143,6 +143,10 @@
     <ClInclude Include="../../Source/igStringRef.hpp" />
     <ClInclude Include="../../Source/igVector.hpp" />
     <ClInclude Include="../../Source/MetadataDumper.hpp" />
+    <ClInclude Include="..\..\Source\igInfo.hpp" />
+    <ClInclude Include="..\..\Source\igNamedObject.hpp" />
+    <ClInclude Include="..\..\Source\InterfaceResolver.hpp" />
+    <ClInclude Include="..\..\Source\tfbScriptObject.hpp" />
     <ClInclude Include="PS3AddressUtils.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="../../Source/__internalObjectBase.hpp" />

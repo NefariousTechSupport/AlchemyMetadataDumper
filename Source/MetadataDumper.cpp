@@ -9,6 +9,9 @@
 #include "igMetaObject.hpp"
 #include "igMetaField.hpp"
 
+#include "InterfaceResolver.hpp"
+#include "tfbScriptObject.hpp"
+
 #include "cpp11hacks.hpp"
 #include "fileio.hpp"
 
@@ -455,6 +458,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	static const Core::igMetaObject* compoundFieldMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igCompoundMetaField");
 	static const Core::igMetaObject* scriptGroupStackMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "ScriptGroupStack");
 	static const Core::igMetaObject* rhsValueStackMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "RHSValueStack");
+	static const Core::igMetaObject* staticMetaFieldMetaObject  = Core::igArkCore_getObjectMeta(ArkCore, "igStaticMetaField");
 
 	// Lots of types are generated from VVL scripts, this filters them
 	// out. If you wanna get that type information you should parse the
@@ -600,6 +604,30 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	}
 #endif // TARGET_GAME >= SKYIM_01_00_00
 
+#if TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00 // tfbScript bindings
+	for (int i = meta->_parent ? meta->_parent->_metaFields._count : 0; i < meta->_metaFields._count; i++)
+	{
+		if (meta->_metaFields.get(i)->getMeta()->isOfType(staticMetaFieldMetaObject)
+		 && streq(meta->_metaFields.get(i)->_fieldName, "_interface"))
+		{
+			Core::igStaticMetaField* interfaceMetaField = static_cast<Core::igStaticMetaField*>(meta->_metaFields.get(i));
+			tfbScript::InterfaceResolver* interface = *static_cast<tfbScript::InterfaceResolver**>(interfaceMetaField->_staticPointer);
+
+			WriteFormattedText(writer, "\t\t<tfbBindings name=\"%s\">\n", interface->_name);
+
+			// I have zero clue why they have two lists when only one is used
+			Core::igTObjectList<tfbScript::tfbScriptObject>* list = interface->_lists[1] ? interface->_lists[1] : interface->_lists[0];
+			for (int b = 0; list && b < list->_count; b++)
+			{
+				tfbScript::tfbScriptObject* binding = list->get(b);
+
+				WriteFormattedTextIndented(writer, 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->_name, binding->_name);
+			}
+
+			writer.WriteText(17, "\t\t</tfbBindings>\n");
+		}
+	}
+#endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
 
 	// Only check the direct parent, otherwise array metafields will cause trouble
 	if (meta->_parent == compoundFieldMetaObject)

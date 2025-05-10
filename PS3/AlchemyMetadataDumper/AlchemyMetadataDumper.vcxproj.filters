@@ -92,6 +92,18 @@
     <ClInclude Include="PS3AddressUtils.hpp">
       <Filter>Header Files\Addresses</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\igInfo.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\igNamedObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\InterfaceResolver.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\tfbScriptObject.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
