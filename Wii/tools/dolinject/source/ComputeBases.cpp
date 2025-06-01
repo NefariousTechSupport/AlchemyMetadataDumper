@@ -41,6 +41,7 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 	if (fOutMakefile == NULL)
 	{
 		printf("Failed to open output makefile file %s with error %" PRId32 "\n", outMakefile, errno);
+		fclose(fInDol);
 		return errno;
 	}
 
@@ -50,6 +51,8 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 	if (amountRead != sizeof(header))
 	{
 		printf("Read %z" PRIu32 " out of %z" PRIu32 " bytes from input dol %s. error number %" PRId32 "\n", amountRead, sizeof(header), inDol, errno);
+		fclose(fInDol);
+		fclose(fOutMakefile);
 		return errno;
 	}
 
@@ -101,12 +104,16 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 	if (outputLength < 0)
 	{
 		printf("Internal encoding error\n");
+		fclose(fInDol);
+		fclose(fOutMakefile);
 		return 1;
 	}
 
 	if (static_cast<uint32_t>(outputLength) > sizeof(output))
 	{
 		printf("Ran out of space writing to internal output buffer\n");
+		fclose(fInDol);
+		fclose(fOutMakefile);
 		return 1;
 	}
 
@@ -114,8 +121,12 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 	if (amountWritten != static_cast<uint32_t>(outputLength))
 	{
 		printf("Wrote %z" PRIu32 " out of %" PRId32 " bytes to output makefile %s. error number %" PRId32 "\n", amountWritten, outputLength, outMakefile, errno);
+		fclose(fInDol);
+		fclose(fOutMakefile);
 		return errno;
 	}
 
+	fclose(fInDol);
+	fclose(fOutMakefile);
 	return 0;
 }
