@@ -32,16 +32,17 @@ INCLUDES	:=
 #---------------------------------------------------------------------------------
 
 # No compiler optimisations, they will break cos of our reliance on UB
-CFLAGS	= -g -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -g -Wall $(MACHDEP) $(INCLUDE) -fno-zero-initialized-in-bss
 CXXFLAGS	=	$(CFLAGS)
 
-LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map -Wl,--section-start=.init=$(BASE_TEXT) -Wl,--section-start=.data=$(BASE_DATA) -Wl,--section-start=.bss=$(BASE_BSS)
+LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map -Wl,--section-start=.text=$(BASE_TEXT) -Wl,--section-start=.data=$(BASE_DATA) -nostdlib -fno-zero-initialized-in-bss
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-# Do not link anything additional, we need the bare minimum to fit in memory
-LIBS	:= -logc
+# Do not link anything extra, additional libraries will have a .bss section
+# which'll destroy us
+LIBS	:=
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
