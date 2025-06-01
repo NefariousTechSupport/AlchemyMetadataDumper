@@ -83,9 +83,9 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 	}
 
 	// Compute the base addresses and align to 0x100
-	uint32_t textBaseAddress = (highestTextLdAddr + highestTextLength + 0xFF) & ~0xFF;
-	uint32_t dataBaseAddress = (highestDataLdAddr + highestDataLength + 0xFF) & ~0xFF;
-	uint32_t  bssBaseAddress = (header.bssLdAddr  + header.bssLength  + 0xFF) & ~0xFF;
+	uint32_t textBaseAddress = ALIGN_FOR_SECTION(highestTextLdAddr + highestTextLength);
+	uint32_t dataBaseAddress = ALIGN_FOR_SECTION(highestDataLdAddr + highestDataLength);
+	uint32_t  bssBaseAddress = ALIGN_FOR_SECTION(header.bssLdAddr  + header.bssLength);
 
 	uint32_t realBaseAddress = std::max(textBaseAddress, std::max(dataBaseAddress, bssBaseAddress));
 
