@@ -12,7 +12,7 @@
 // Command declarations
 //-----------------------------------------------------------------------------
 int ComputeBases(const char* inDol, const char* outMakefile);
-int Inject(const char* inDol, const char* outDol);
+int Inject(const char* gameDol, const char* injectDol, const char* outDol);
 
 
 
@@ -33,8 +33,8 @@ void PrintHelp()
 		"\t  injected code with from the provided and outputs a makefile with the settings\n"
 		"\t  to be used in compiling the code.\n"
 		"\n"
-		"\t- inject <input dol> <output dol>\n"
-		"\t  Does the actual code injection. It takes in an input .dol and an output .dol\n"
+		"\t- inject <game dol> <injection dol> <output dol>\n"
+		"\t  Does the actual code injection. It takes in two input .dols and an output .dol\n"
 	);
 }
 
@@ -76,13 +76,13 @@ int main(int argc, char* argv[])
 		}
 		else if (arg == "inject")
 		{
-			if (i + 2 >= argc)
+			if (i + 3 >= argc)
 			{
 				PrintHelp();
 				break;
 			}
 
-			result = Inject(argv[i + 1], argv[i + 2]);
+			result = Inject(argv[i + 1], argv[i + 2], argv[i + 3]);
 			break;
 		}
 	}

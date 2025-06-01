@@ -16,8 +16,20 @@
 // Internal constants
 //-----------------------------------------------------------------------------
 // This needs to not be hardcoded but this is the best we got rn
+//
+// Executable is laid out like this (ascending virtual address):
+//   - original .text sections (at most 7)
+//   - original .data sections (at most 11)
+//   - original .bss (only one)
+//   - injected .text
+//   - injected .data + injected .bss embedded into the .data section
+//
+// The .bss section cannot be changed, we cannot grow it cos we'll overlap
+// the game's .data section, ideally we would inject the .bss into an injected
+// .data section, but i couldn't figure that out so we're just avoiding a .bss section.
+//
+// The injected .text and .data sections take the first empty slot
 static constexpr uint32_t sTextBudget = 0x28000;
-static constexpr uint32_t sDataBudget = 0x10000;
 
 
 
@@ -93,12 +105,10 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 	int outputLength = snprintf(output, sizeof(output),
 		"export BASE_TEXT=0x%08X\n"
 		"export BASE_DATA=0x%08X\n"
-		"export BASE_BSS=0x%08X\n"
 		"\n"
 		"include Makefile.wii\n",
 		realBaseAddress,
-		realBaseAddress + sTextBudget,
-		realBaseAddress + sTextBudget + sDataBudget
+		realBaseAddress + sTextBudget
 	);
 
 	if (outputLength < 0)
