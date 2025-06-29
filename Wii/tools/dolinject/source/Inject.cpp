@@ -8,13 +8,23 @@
 #include <algorithm>
 
 #include "dol.h"
-#include "fileutil.hpp"
 
 
 
 
 
-//
+//=============================================================================
+// Internal Constants 
+//-----------------------------------------------------------------------------
+constexpr uint32_t kNumItems = sTextSectionMax + sDataSectionMax + 1;  
+
+
+
+
+
+//=============================================================================
+// Function declarations
+//-----------------------------------------------------------------------------
 static void Validate(DolHeader* header);
 
 
@@ -22,7 +32,7 @@ static void Validate(DolHeader* header);
 
 
 //=============================================================================
-// Inject: 
+// Inject: Does the code injection
 //-----------------------------------------------------------------------------
 int Inject(const char* gameDol, const char* injectDol, const char* outDol)
 {
@@ -196,8 +206,11 @@ int Inject(const char* gameDol, const char* injectDol, const char* outDol)
 
 
 
-constexpr uint32_t kNumItems = sTextSectionMax + sDataSectionMax + 1;  
 
+//=============================================================================
+// MakeIndexReadable: Converts the index for the arrays in Validate to
+// something readable
+//-----------------------------------------------------------------------------
 static void MakeIndexReadable(uint32_t input, const char** sectionName, uint32_t* index)
 {
 	int32_t textIndex = (input < sTextSectionMax ? input : -1);
@@ -212,6 +225,9 @@ static void MakeIndexReadable(uint32_t input, const char** sectionName, uint32_t
 
 
 
+//=============================================================================
+// Validate: Validates the dol header and warns of overlapping sections 
+//-----------------------------------------------------------------------------
 static void Validate(DolHeader* header)
 {
 	std::array<uint32_t, kNumItems> addresses =
