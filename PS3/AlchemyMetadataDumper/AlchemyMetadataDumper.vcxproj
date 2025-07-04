@@ -152,7 +152,6 @@
     <ClInclude Include="../../Source/__internalObjectBase.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="../../Source/asserts.cpp" />
     <ClCompile Include="../../Source/fileio.cpp" />
     <ClCompile Include="../../Source/igMetaField.cpp" />
     <ClCompile Include="Imaginators_1_1_0_Addresses.cpp" />

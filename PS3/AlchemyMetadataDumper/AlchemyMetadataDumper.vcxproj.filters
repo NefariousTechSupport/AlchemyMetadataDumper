@@ -112,9 +112,6 @@
     <ClCompile Include="prx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="../../Source/asserts.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="../../Source/MetadataDumper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
