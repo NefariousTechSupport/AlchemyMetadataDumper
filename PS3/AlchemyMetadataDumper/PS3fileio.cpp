@@ -1,7 +1,7 @@
 #include "fileio.hpp"
 
 #include <cell/fs/cell_fs_file_api.h>
-#include <stdint.h>
+#include "alchemystdint.h"
 
 #include "Addresses.h"
 
@@ -32,9 +32,9 @@ void FileWriter::platformCloseHandle()
 	cellFsClose(_handle);
 }
 
-int32_t FileWriter::platformWriteFile(const char* data, int32_t len)
+aint32_t FileWriter::platformWriteFile(const char* data, aint32_t len)
 {
-	uint64_t written = 0;
+	auint64_t written = 0;
 	cellFsWrite(_handle, data, len, &written);
 	return written;
 }

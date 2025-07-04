@@ -30,7 +30,7 @@ FileWriter::~FileWriter()
 
 int FileWriter::WriteText(int len, const char* text)
 {
-	uint64_t written = platformWriteFile(text, len);
+	auint64_t written = platformWriteFile(text, len);
 
 	if (written != len)
 	{
@@ -49,7 +49,7 @@ int FileWriter::WriteTextf(int n, const char* fmt, ...)
 
 	va_end(args);
 
-	uint64_t written = platformWriteFile(text, res);
+	auint64_t written = platformWriteFile(text, res);
 
 	if (written != res)
 	{

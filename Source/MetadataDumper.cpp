@@ -273,11 +273,11 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (fieldType->isOfType(vectorMetaObject))
 	{
 		Core::igVectorMetaField* vectorMetaField = (Core::igVectorMetaField*)metafield;
-		int32_t memTypeAlign = vectorMetaField->_memTypeAlignment;
+		aint32_t memTypeAlign = vectorMetaField->_memTypeAlignment;
 		if (memTypeAlign > 0)
 		{
 			Core::igObject* templateParam = metafield->getTemplateParameter(0);
-			uint32_t memTypeSize;
+			auint32_t memTypeSize;
 			if (templateParam->getMeta()->isOfType(metaFieldMetaObject))
 			{
 				memTypeSize = reinterpret_cast<Core::igMetaField*>(templateParam)->computeSize();
@@ -306,7 +306,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	}
 
 	void* data = nullptr;
-	if((int32_t)metafield->_default._size < 0) data = &metafield->_default._buffer;
+	if((aint32_t)metafield->_default._size < 0) data = &metafield->_default._buffer;
 	else data = metafield->_default._buffer;
 
 	if (data != nullptr)
@@ -591,7 +591,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 		if (dotnetMeta->_exposedFieldCount > 0)
 		{
 			writer.WriteText(17, "\t\t<dotnetfields>\n");
-			for (int32_t i = 0; i < dotnetMeta->_exposedFieldCount; i++)
+			for (aint32_t i = 0; i < dotnetMeta->_exposedFieldCount; i++)
 			{
 				WriteFormattedTextIndented(writer,
 										3,
@@ -670,7 +670,7 @@ void DumpMetaObjects()
 	writer.WriteText(14, "</metaobjects>");
 }
 
-void MetadataDumperThread(uint64_t threadId)
+void MetadataDumperThread()
 {
 	_igReportPrintf("hai\n");
 

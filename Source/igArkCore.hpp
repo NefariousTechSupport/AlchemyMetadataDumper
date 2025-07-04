@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "alchemystdint.h"
 
 #include "Games.h"
 
@@ -15,7 +15,7 @@ namespace Core
 	{
 	private:
 #if TARGET_PS3 && TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
-		uint8_t _unk00[0x24];
+		auint8_t _unk00[0x24];
 #else
 #error "unsupported platform or game!"
 #endif

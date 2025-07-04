@@ -14,45 +14,45 @@ namespace Core
 	{
 		static const char* sPropertyTypeStrings[];
 
-		uint32_t _copyMethod : 2;
-		uint32_t _resetMethod : 2;
-		uint32_t _isAlikeMethod : 2;
-		uint32_t _itemsCopyMethod : 2;
-		uint32_t _keysCopyMethod : 2;
-		uint32_t _requiredAlignment : 8;
-		uint32_t _persistent : 1;
-		uint32_t _hasInvariance : 1;
-		uint32_t _hasPoolName : 1;
-		uint32_t _mutable : 1;
-		uint32_t _implicitAlignment : 1;
+		auint32_t _copyMethod : 2;
+		auint32_t _resetMethod : 2;
+		auint32_t _isAlikeMethod : 2;
+		auint32_t _itemsCopyMethod : 2;
+		auint32_t _keysCopyMethod : 2;
+		auint32_t _requiredAlignment : 8;
+		auint32_t _persistent : 1;
+		auint32_t _hasInvariance : 1;
+		auint32_t _hasPoolName : 1;
+		auint32_t _mutable : 1;
+		auint32_t _implicitAlignment : 1;
 	};
 
 
 	class igMetaField : public igObject
 	{
 	public:
-		uint16_t _parentMetaObjectIndex;	//0x08
-		int16_t _typeIndex;					//0x0A
-		int16_t _internalIndex;				//0x0C
-		uint16_t _size;						//0x0E
-		uint16_t _offset;					//0x10
+		auint16_t _parentMetaObjectIndex;	//0x08
+		aint16_t _typeIndex;					//0x0A
+		aint16_t _internalIndex;				//0x0C
+		auint16_t _size;						//0x0E
+		auint16_t _offset;					//0x10
 		igObjectList* _attributes;			//0x14
 		union
 		{
 			fieldProperties _properties;
-			uint32_t _propertiesBitfield;
+			auint32_t _propertiesBitfield;
 		};
 		char * _fieldName;					//0x1C
-		igMemory<uint8_t> _default;			//0x20
+		igMemory<auint8_t> _default;			//0x20
 
 		inline const char* getStringFromMemory(void* memory, igObject* directory)
 		{
 			const char* string;
 
 #if TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
-			const uint32_t kGetStringFromMemoryVTIndex = 0x45;
+			const auint32_t kGetStringFromMemoryVTIndex = 0x45;
 #elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-			const uint32_t kGetStringFromMemoryVTIndex = 0x3E;
+			const auint32_t kGetStringFromMemoryVTIndex = 0x3E;
 #else
 #error "Unimplemented game"
 #endif
@@ -68,19 +68,19 @@ namespace Core
 		}
 #if TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
 		DefineVirtualFunc_0(0x16, igMetaField*, getGenericMetaField);
-		DefineVirtualFunc_0(0x1F, uint32_t, computeSize);
-		DefineVirtualFunc_1(0x20, uint32_t, computePlatformSize, int32_t, platform);
-		DefineVirtualFunc_0(0x23, uint32_t, computeRequiredAlignment);
-		DefineVirtualFunc_1(0x24, uint32_t, computePlatformAlignment, int32_t, platform);
+		DefineVirtualFunc_0(0x1F, auint32_t, computeSize);
+		DefineVirtualFunc_1(0x20, auint32_t, computePlatformSize, aint32_t, platform);
+		DefineVirtualFunc_0(0x23, auint32_t, computeRequiredAlignment);
+		DefineVirtualFunc_1(0x24, auint32_t, computePlatformAlignment, aint32_t, platform);
 		//DefineVirtualFunc_2(0x45, igStringRef, getStringFromMemory, void*, memory, igObjectDirectory*, directory);
 		DefineVirtualFunc_0_c(0x52, int, getTemplateParameterCount);
 		DefineVirtualFunc_1(0x53, igObject*, getTemplateParameter, int, i);
 #elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
 		DefineVirtualFunc_0(0x10, igMetaField*, getGenericMetaField);
-		DefineVirtualFunc_0(0x1A, uint32_t, computeSize);
-		DefineVirtualFunc_1(0x1B, uint32_t, computePlatformSize, int32_t, platform);
-		DefineVirtualFunc_0(0x1E, uint32_t, computeRequiredAlignment);
-		DefineVirtualFunc_1(0x1F, uint32_t, computePlatformAlignment, int32_t, platform);
+		DefineVirtualFunc_0(0x1A, auint32_t, computeSize);
+		DefineVirtualFunc_1(0x1B, auint32_t, computePlatformSize, aint32_t, platform);
+		DefineVirtualFunc_0(0x1E, auint32_t, computeRequiredAlignment);
+		DefineVirtualFunc_1(0x1F, auint32_t, computePlatformAlignment, aint32_t, platform);
 		//DefineVirtualFunc_2(0x3E, igStringRef, getStringFromMemory, void*, memory, igObjectDirectory*, directory);
 		DefineVirtualFunc_0_c(0x4B, int, getTemplateParameterCount);
 		DefineVirtualFunc_1(0x4C, igObject*, getTemplateParameter, int, i);
@@ -101,9 +101,9 @@ namespace Core
 	class igMemoryRefMetaField : public igRefMetaField
 	{
 	public:
-		int32_t _memSize;
+		aint32_t _memSize;
 		igMetaField* _memType;
-		int32_t _memTypeAlignment;
+		aint32_t _memTypeAlignment;
 		igMetaField* _memTypeRef;
 		bool _releaseOnCopy;
 		bool _releaseOnReset;
@@ -130,8 +130,8 @@ namespace Core
 	class igBitFieldMetaField : public igMetaField
 	{
 	public:
-		uint32_t _shift;
-		uint32_t _bits;
+		auint32_t _shift;
+		auint32_t _bits;
 		igMetaField* _storageMetaField;
 		igMetaField* _assignmentMetaField;
 	};
@@ -163,9 +163,9 @@ namespace Core
 	public:
 		igTObjectList<igMetaField>* _fieldList;
 #if TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
-		const uint32_t kVTIndexGetGenericMetaField = 0x16;
+		const auint32_t kVTIndexGetGenericMetaField = 0x16;
 #elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-		const uint32_t kVTIndexGetGenericMetaField = 0x11;
+		const auint32_t kVTIndexGetGenericMetaField = 0x11;
 #else
 #error "Unimplemented game"
 #endif
@@ -176,7 +176,7 @@ namespace Core
 	class igStructMetaField : public igMetaField
 	{
 	public:
-		uint16_t _typeSize;
+		auint16_t _typeSize;
 		void* _cppConstructor;
 		void* _cppDestructor;
 	};
@@ -186,8 +186,8 @@ namespace Core
 	public:
 		igMetaField* _memType;
 		igMetaField* _memTypeRef;
-		int32_t _memTypeAlignment;
+		aint32_t _memTypeAlignment;
 		igMetaObject* _elementType;
-		int32_t _initialCapacity;
+		aint32_t _initialCapacity;
 	};
 }

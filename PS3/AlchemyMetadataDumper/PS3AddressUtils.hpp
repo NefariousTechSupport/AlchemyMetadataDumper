@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "alchemystdint.h"
 
 #ifndef PS3_TOC_BASE
 #error "You must define PS3_TOC_BASE before including PS3AddressUtils.hpp, please do so on the line before"
@@ -9,8 +9,8 @@
 
 struct opd_s
 {
-	uint32_t sub;
-	uint32_t toc;
+	auint32_t sub;
+	auint32_t toc;
 };
 
 

@@ -12,22 +12,22 @@ namespace Core
 	{
 	public:
 		igTVector<igMetaField*> _metaFields;
-		int32_t _instanceCount;
+		aint32_t _instanceCount;
 		void** _vTablePointer;
 		igMetaObject* _parent;
 		igObject* _lastChild;
 		igObject* _nextSibling;
-		uint16_t _index;
-		uint16_t _sizeofSize;
-		uint16_t _properties;
-		uint16_t _requiredAlignment;
+		auint16_t _index;
+		auint16_t _sizeofSize;
+		auint16_t _properties;
+		auint16_t _requiredAlignment;
 		igTVector<void*> _metaFunctions;
 		igObjectList* _attributes;
 #if TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-		int16_t _id;
-		int16_t _tfbID;
+		aint16_t _id;
+		aint16_t _tfbID;
 #else
-		int32_t _id;
+		aint32_t _id;
 #endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
 
 		inline bool isOfType(const igMetaObject* other) const
@@ -51,10 +51,10 @@ namespace DotNet
 #if TARGET_GAME >= SKYIM_01_00_00 // These only exist on imaginators up (issue #3)
 		void* _dotNetFieldNames;
 		void* _cppFieldNames;
-		int32_t _exposedFieldCount;
+		aint32_t _exposedFieldCount;
 		void* _cppMethods;
 		void* _cppMethodNames;
-		int32_t _cppMethodCount;
+		aint32_t _cppMethodCount;
 #endif // TARGET_GAME >= SKYIM_01_00_00
 		bool _isInterface;
 		bool _baseMethodsInherited;

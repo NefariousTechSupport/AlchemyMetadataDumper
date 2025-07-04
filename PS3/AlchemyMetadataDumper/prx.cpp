@@ -34,8 +34,14 @@ sys_ppu_thread_t create_thread(void(*entry)(uint64_t), int priority, size_t stac
 	return tid;
 }
 
+// Wrapper around MetadataDumperThread
+static void MetadataDumperThreadPS3(uint64_t threadId)
+{
+	MetadataDumperThread();
+}
+
 extern "C" int _AlchemyMetadataDumper_prx_entry(void)
 {
-	create_thread(MetadataDumperThread, 0x4AA, 0x6000, "Metadata Dumper Thread", dumperThread);
+	create_thread(MetadataDumperThreadPS3, 0x4AA, 0x6000, "Metadata Dumper Thread", dumperThread);
     return SYS_PRX_RESIDENT;
 }

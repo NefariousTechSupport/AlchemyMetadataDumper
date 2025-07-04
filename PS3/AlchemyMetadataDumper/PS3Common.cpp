@@ -1,9 +1,9 @@
 #include "AddressUtils.h"
 
-#include <stdint.h>
+#include "alchemystdint.h"
 
 // This never changes between games on ps3
-void* GetVirtualFunc(void* vtablePtr, uint32_t index)
+void* GetVirtualFunc(void* vtablePtr, auint32_t index)
 {
 	return (((void**)vtablePtr)[index]);
 }

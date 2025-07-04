@@ -12,11 +12,11 @@ namespace Core
 	{
 	public:
 #if TARGET_GAME >= SKYSC_01_00_00 && SKYIM_01_01_00 <= SKYIM_01_01_00
-		const uint32_t kVTIndexKeyTraitsInvalid   = 0x1B;
-		const uint32_t kVTIndexValueTraitsInvalid = 0x1E;
+		const auint32_t kVTIndexKeyTraitsInvalid   = 0x1B;
+		const auint32_t kVTIndexValueTraitsInvalid = 0x1E;
 #elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-		const uint32_t kVTIndexKeyTraitsInvalid   = 0x18;
-		const uint32_t kVTIndexValueTraitsInvalid = 0x1B;
+		const auint32_t kVTIndexKeyTraitsInvalid   = 0x18;
+		const auint32_t kVTIndexValueTraitsInvalid = 0x1B;
 #else
 #error "Unimplemented game"
 #endif 

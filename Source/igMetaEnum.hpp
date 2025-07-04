@@ -11,7 +11,7 @@ namespace Core
 	public:
 		bool _flags;
 		igTDataList<const char*>* _names;
-		igTDataList<int32_t>* _values;
+		igTDataList<aint32_t>* _values;
 		igObjectList* _attributes;
 		igObjectList* _valueAttributes;
 	};

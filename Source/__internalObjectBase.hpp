@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include "alchemystdint.h"
 
 #include "cpp11hacks.hpp"
 
@@ -25,7 +25,7 @@ namespace Core
 	{
 	public:
 		void** _vTable;
-		uint32_t _referenceCount;
+		auint32_t _referenceCount;
 
 		DefineVirtualFunc_0_c(0, igMetaObject*, getMeta)
 	};

@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <stdint.h>
+#include "alchemystdint.h"
 
 // extra level of indirection to so the line number is used,
 // otherwise __LINE__ would be tokenized
@@ -37,6 +37,6 @@ private:
 	void platformOpenFile(const char* filepath);
 	void platformTruncateFile(const char* filepath);
 	void platformCloseHandle();
-	int32_t platformWriteFile(const char* data, int32_t len);
+	aint32_t platformWriteFile(const char* data, aint32_t len);
 	int _handle;
 };
