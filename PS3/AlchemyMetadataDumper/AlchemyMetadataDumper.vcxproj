@@ -148,12 +148,14 @@
     <ClInclude Include="..\..\Source\igNamedObject.hpp" />
     <ClInclude Include="..\..\Source\InterfaceResolver.hpp" />
     <ClInclude Include="..\..\Source\tfbScriptObject.hpp" />
+    <ClInclude Include="asleep.h" />
     <ClInclude Include="PS3AddressUtils.hpp" />
     <ClInclude Include="../../Source/__internalObjectBase.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="../../Source/fileio.cpp" />
     <ClCompile Include="../../Source/igMetaField.cpp" />
+    <ClCompile Include="asleep.cpp" />
     <ClCompile Include="Imaginators_1_1_0_Addresses.cpp" />
     <ClCompile Include="../../Source/MetadataDumper.cpp" />
     <ClCompile Include="prx.cpp" />

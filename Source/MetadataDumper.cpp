@@ -13,6 +13,7 @@
 #include "tfbScriptObject.hpp"
 
 #include "cpp11hacks.hpp"
+#include "asleep.h"
 #include "fileio.hpp"
 
 #define DEBUG_LOGS 0
@@ -302,7 +303,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (streq(numField->_fieldName, "_num"))
 	{
 		DEBUGPRINTF("Located num metafield at %08X, num field at %02X\n", numField, numField->_offset);
-		WriteFormattedText(writer, " num=\"%d\"", *(int*)(((size_t)metafield) + numField->_offset))
+		WriteFormattedText(writer, " num=\"%d\"", *(int*)(((asize_t)metafield) + numField->_offset))
 	}
 
 	void* data = nullptr;
@@ -674,7 +675,7 @@ void MetadataDumperThread()
 {
 	_igReportPrintf("hai\n");
 
-	sleep(10000);
+	asleep(10000);
 
 	_igReportPrintf("dumping metadata now\n");
 

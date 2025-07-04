@@ -104,6 +104,9 @@
     <ClInclude Include="..\..\Source\alchemystdint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="asleep.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="prx.cpp">
@@ -132,6 +135,9 @@
     </ClCompile>
     <ClCompile Include="TrapTeam_1_1_0_Addresses.cpp">
       <Filter>Source Files\Addresses</Filter>
+    </ClCompile>
+    <ClCompile Include="asleep.cpp">
+      <Filter>Source Files\PS3</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
