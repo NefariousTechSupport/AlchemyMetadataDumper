@@ -34,8 +34,8 @@ void FileWriter::platformCloseHandle()
 
 aint32_t FileWriter::platformWriteFile(const char* data, aint32_t len)
 {
-	auint64_t written = 0;
+	uint64_t written = 0;
 	cellFsWrite(_handle, data, len, &written);
-	return written;
+	return static_cast<aint32_t>(written);
 }
 

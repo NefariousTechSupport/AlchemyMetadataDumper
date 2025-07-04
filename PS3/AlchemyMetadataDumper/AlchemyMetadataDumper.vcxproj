@@ -85,7 +85,7 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;__CELL_ASSERT__;TARGET_PS3=1;TARGET_GAME=GameCode(2015,  9, 20,  1,  6,  0);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <AdditionalIncludeDirectories>../../Source</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -143,12 +143,12 @@
     <ClInclude Include="../../Source/igStringRef.hpp" />
     <ClInclude Include="../../Source/igVector.hpp" />
     <ClInclude Include="../../Source/MetadataDumper.hpp" />
+    <ClInclude Include="..\..\Source\alchemystdint.h" />
     <ClInclude Include="..\..\Source\igInfo.hpp" />
     <ClInclude Include="..\..\Source\igNamedObject.hpp" />
     <ClInclude Include="..\..\Source\InterfaceResolver.hpp" />
     <ClInclude Include="..\..\Source\tfbScriptObject.hpp" />
     <ClInclude Include="PS3AddressUtils.hpp" />
-    <ClInclude Include="stdafx.h" />
     <ClInclude Include="../../Source/__internalObjectBase.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -159,13 +159,6 @@
     <ClCompile Include="prx.cpp" />
     <ClCompile Include="PS3Common.cpp" />
     <ClCompile Include="PS3fileio.cpp" />
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|PS3'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugSuperchargers1_6_0|PS3'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugTrapTeam1_1_0|PS3'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugImaginators1_1_0|PS3'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|PS3'">Create</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="SuperChargers_1_6_0_Addresses.cpp" />
     <ClCompile Include="TrapTeam_1_1_0_Addresses.cpp" />
   </ItemGroup>

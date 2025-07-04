@@ -20,9 +20,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="../../Source/AddressUtils.h">
       <Filter>Header Files\Addresses</Filter>
     </ClInclude>
@@ -104,11 +101,11 @@
     <ClInclude Include="..\..\Source\tfbScriptObject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\alchemystdint.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="prx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

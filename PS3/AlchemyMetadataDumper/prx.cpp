@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include <cellstatus.h>
 #include <sys/prx.h>
 #include <sys/ppu_thread.h>
