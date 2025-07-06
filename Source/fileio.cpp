@@ -1,9 +1,11 @@
 #include "fileio.hpp"
 
 #include "Addresses.h"
-
-#include <string.h>
+#if TARGET_WII
+#include "support.h"
+#else
 #include <stdarg.h>
+#endif // TARGET_WII
 
 #define WRITE_BUFFER_SIZE 0x200
 
