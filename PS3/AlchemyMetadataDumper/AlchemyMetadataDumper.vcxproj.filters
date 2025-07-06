@@ -104,7 +104,7 @@
     <ClInclude Include="..\..\Source\alchemystdint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="asleep.h">
+    <ClInclude Include="..\..\Source\asleep.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

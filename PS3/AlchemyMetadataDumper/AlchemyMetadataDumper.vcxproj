@@ -148,7 +148,7 @@
     <ClInclude Include="..\..\Source\igNamedObject.hpp" />
     <ClInclude Include="..\..\Source\InterfaceResolver.hpp" />
     <ClInclude Include="..\..\Source\tfbScriptObject.hpp" />
-    <ClInclude Include="asleep.h" />
+    <ClInclude Include="..\..\Source\asleep.h" />
     <ClInclude Include="PS3AddressUtils.hpp" />
     <ClInclude Include="../../Source/__internalObjectBase.hpp" />
   </ItemGroup>
