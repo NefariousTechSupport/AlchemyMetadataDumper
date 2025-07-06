@@ -16,6 +16,14 @@
   +                         (Minor * 100)  \
   +                               (Patch)) 
 
+// Spyro's Adventure
+// Patch number corresponds to revision number
+#define SKYSA_01_00_01     GameCode(2011, 10, 13,  1,  0,  1)
+#define SKYSA_01_00_02     GameCode(2011, 10, 13,  1,  0,  2)
+#define SKYSA_01_00_03     GameCode(2011, 10, 13,  1,  0,  3)
+#define SKYSA_BEGIN        SKYSA_01_00_01
+#define SKYSA_END          SKYSA_01_00_03
+
 // Skylanders Trap Team
 #define SKYTT_01_00_00     GameCode(2014, 10,  2,  1,  0,  0)
 #define SKYTT_01_01_00     GameCode(2014, 10,  2,  1,  1,  0)
@@ -29,3 +37,8 @@
 // Skylanders Imaginators, these dates are wrong
 #define SKYIM_01_00_00     GameCode(2016, 10, 14,  1,  0,  0)
 #define SKYIM_01_01_00     GameCode(2016, 10, 14,  1,  1,  0)
+
+
+#ifndef TARGET_GAME
+#error No game was specified
+#endif // TARGET_GAME
