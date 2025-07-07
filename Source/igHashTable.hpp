@@ -7,20 +7,17 @@
 
 namespace Core
 {
-	template<typename T, typename U>
-	class igTUHashTable : igContainer
+	class igHashTableVirtuals : public igContainer
 	{
 	public:
-#if TARGET_GAME >= SKYSC_01_00_00 && SKYIM_01_01_00 <= SKYIM_01_01_00
-		const auint32_t kVTIndexKeyTraitsInvalid   = 0x1B;
-		const auint32_t kVTIndexValueTraitsInvalid = 0x1E;
-#elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-		const auint32_t kVTIndexKeyTraitsInvalid   = 0x18;
-		const auint32_t kVTIndexValueTraitsInvalid = 0x1B;
-#else
-#error "Unimplemented game"
-#endif 
-		
+		DefineVirtualFunc_0(void*, keyTraitsInvalid);
+		DefineVirtualFunc_0(void*, valueTraitsInvalid);
+	};
+
+	template<typename T, typename U>
+	class igTUHashTable : public igHashTableVirtuals
+	{
+	public:
 		igMemory<T> _values;
 		igMemory<U> _keys;
 		int _hashItemCount;

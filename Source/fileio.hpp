@@ -8,7 +8,7 @@
 #define WriteFormattedTextConcat_(a, b) a ## b
 #define WriteFormattedTextConcat(a, b) WriteFormattedTextConcat_(a, b)
 #define WriteFormattedText(writer, fmt, ...) \
-	len = __stubs::__sprintf(buf, fmt, __VA_ARGS__); \
+	len = __stubs::sprintf(buf, fmt, __VA_ARGS__); \
 	writer.WriteText(len, buf);
 
 #define WriteIndentation(writer, indentation) \

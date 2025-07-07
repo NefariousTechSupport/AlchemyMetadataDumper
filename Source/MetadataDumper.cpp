@@ -541,7 +541,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 				//
 				// the _data field of this igObjectList claims that the memory
 				// contains igObjects, rather than the actual element type.
-				elementType = ((Core::igMetaObject*(*)(Core::igObjectList*))GetVirtualFunc(meta->_vTablePointer, Core::igObjectList::kVTIndexGetElementType))(0);
+				elementType = ((Core::igMetaObject*(*)(Core::igObjectList*))GetVirtualFunc(meta->_vTablePointer, Core::igObjectList::kVTIndex_getElementType))(0);
 			}
 
 			WriteFormattedTextIndented(writer, 2, "<objectlist elementtype=\"%s\"/>\n", elementType->_name);
@@ -555,8 +555,8 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			Core::igMemoryRefMetaField* valuesField = (Core::igMemoryRefMetaField*)meta->_metaFields.get(0);
 			Core::igMemoryRefMetaField* keysField   = (Core::igMemoryRefMetaField*)meta->_metaFields.get(1);
 
-			void* invalidKey   = ((Core::igMetaObject*(*)(Core::igContainer*))GetVirtualFunc(meta->_vTablePointer, Core::igTUHashTable<void*, void*>::kVTIndexKeyTraitsInvalid))(0);
-			void* invalidValue = ((Core::igMetaObject*(*)(Core::igContainer*))GetVirtualFunc(meta->_vTablePointer, Core::igTUHashTable<void*, void*>::kVTIndexValueTraitsInvalid))(0);
+			void* invalidKey   = ((void*(*)(Core::igHashTableVirtuals*))GetVirtualFunc(meta->_vTablePointer, Core::igHashTableVirtuals::kVTIndex_keyTraitsInvalid))(0);
+			void* invalidValue = ((void*(*)(Core::igHashTableVirtuals*))GetVirtualFunc(meta->_vTablePointer, Core::igHashTableVirtuals::kVTIndex_valueTraitsInvalid))(0);
 
 			WriteFormattedTextIndented(writer,
 										2,
@@ -635,7 +635,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	{
 		writer.WriteText(19, "\t\t<compoundfields>\n");
 
-		Core::igCompoundMetaField* genericCompound = ((Core::igCompoundMetaField*(*)(Core::igMetaField*))GetVirtualFunc(meta->_vTablePointer, Core::igCompoundMetaField::kVTIndexGetGenericMetaField))(0);
+		Core::igCompoundMetaField* genericCompound = ((Core::igCompoundMetaField*(*)(Core::igMetaField*))GetVirtualFunc(meta->_vTablePointer, Core::igMetaField::kVTIndex_getGenericMetaField))(0);
 
 		for (int i = 0; i < genericCompound->_fieldList->_count; i++)
 		{

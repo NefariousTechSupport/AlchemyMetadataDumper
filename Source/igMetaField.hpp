@@ -49,44 +49,23 @@ namespace Core
 		{
 			const char* string;
 
-#if TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
-			const auint32_t kGetStringFromMemoryVTIndex = 0x45;
-#elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-			const auint32_t kGetStringFromMemoryVTIndex = 0x3E;
-#else
-#error "Unimplemented game"
-#endif
-
 #if TARGET_PPC
 			// PowerPC abi moment
-			((const char*(*)(const char**, igMetaField*, void*, igObject*))GetVirtualFunc(_vTable, kGetStringFromMemoryVTIndex))(&string, this, memory, directory);
+			((const char*(*)(const char**, igMetaField*, void*, igObject*))GetVirtualFunc(_vTable, kVTIndex_getStringFromMemory))(&string, this, memory, directory);
 #else
 #error "Platform not supported"
 #endif // TARGET_PPC
 
 			return string;
 		}
-#if TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
-		DefineVirtualFunc_0(0x16, igMetaField*, getGenericMetaField);
-		DefineVirtualFunc_0(0x1F, auint32_t, computeSize);
-		DefineVirtualFunc_1(0x20, auint32_t, computePlatformSize, aint32_t, platform);
-		DefineVirtualFunc_0(0x23, auint32_t, computeRequiredAlignment);
-		DefineVirtualFunc_1(0x24, auint32_t, computePlatformAlignment, aint32_t, platform);
-		//DefineVirtualFunc_2(0x45, igStringRef, getStringFromMemory, void*, memory, igObjectDirectory*, directory);
-		DefineVirtualFunc_0_c(0x52, int, getTemplateParameterCount);
-		DefineVirtualFunc_1(0x53, igObject*, getTemplateParameter, int, i);
-#elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-		DefineVirtualFunc_0(0x10, igMetaField*, getGenericMetaField);
-		DefineVirtualFunc_0(0x1A, auint32_t, computeSize);
-		DefineVirtualFunc_1(0x1B, auint32_t, computePlatformSize, aint32_t, platform);
-		DefineVirtualFunc_0(0x1E, auint32_t, computeRequiredAlignment);
-		DefineVirtualFunc_1(0x1F, auint32_t, computePlatformAlignment, aint32_t, platform);
-		//DefineVirtualFunc_2(0x3E, igStringRef, getStringFromMemory, void*, memory, igObjectDirectory*, directory);
-		DefineVirtualFunc_0_c(0x4B, int, getTemplateParameterCount);
-		DefineVirtualFunc_1(0x4C, igObject*, getTemplateParameter, int, i);
-#else
-#error "Unimplemented game"
-#endif
+		DefineVirtualFunc_0(igMetaField*, getGenericMetaField);
+		DefineVirtualFunc_0(auint32_t, computeSize);
+		DefineVirtualFunc_1(auint32_t, computePlatformSize, aint32_t, platform);
+		DefineVirtualFunc_0(auint32_t, computeRequiredAlignment);
+		DefineVirtualFunc_1(auint32_t, computePlatformAlignment, aint32_t, platform);
+		DeclareVirtualFunc(getStringFromMemory);
+		DefineVirtualFunc_0_c(int, getTemplateParameterCount);
+		DefineVirtualFunc_1(igObject*, getTemplateParameter, int, i);
 	};
 
 	class igRefMetaField : public igMetaField
@@ -162,15 +141,8 @@ namespace Core
 	{
 	public:
 		igTObjectList<igMetaField>* _fieldList;
-#if TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
-		const auint32_t kVTIndexGetGenericMetaField = 0x16;
-#elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-		const auint32_t kVTIndexGetGenericMetaField = 0x11;
-#else
-#error "Unimplemented game"
-#endif
 
-		DefineVirtualFunc_0(kVTIndexGetGenericMetaField, igCompoundMetaField*, getGenericMetaField)
+		DefineVirtualFunc_0(igCompoundMetaField*, getGenericMetaField)
 	};
 
 	class igStructMetaField : public igMetaField

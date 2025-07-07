@@ -14,7 +14,7 @@
 void FileWriter::platformOpenFile(const char* filepath)
 {
 	char prefixedPath[255];
-	__stubs::__sprintf(prefixedPath, FILE_PREFIX "%s", filepath);
+	__stubs::sprintf(prefixedPath, FILE_PREFIX "%s", filepath);
 
 	cellFsOpen(prefixedPath, CELL_FS_O_CREAT|CELL_FS_O_WRONLY, &_handle, NULL, 0);
 }
@@ -22,7 +22,7 @@ void FileWriter::platformOpenFile(const char* filepath)
 void FileWriter::platformTruncateFile(const char* filepath)
 {
 	char prefixedPath[255];
-	__stubs::__sprintf(prefixedPath, FILE_PREFIX "%s", filepath);
+	__stubs::sprintf(prefixedPath, FILE_PREFIX "%s", filepath);
 
 	cellFsTruncate(prefixedPath, 0);
 }

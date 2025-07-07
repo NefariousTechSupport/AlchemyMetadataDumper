@@ -16,9 +16,8 @@ struct opd_s
 
 // Defines a PS3 method with its function address and toc
 #define DefineMethodWithToc(address, toc, ret, name, ...) \
-opd_s _##name = { address, toc }; \
-ret(*name)(__VA_ARGS__) = (ret(*)(__VA_ARGS__))&_##name
-
+static const opd_s _##address##toc = { address, toc }; \
+ret(*name)(__VA_ARGS__) = (ret(*)(__VA_ARGS__))&_##address##toc
 
 // Defines a PS3 method with its function address
 #define DefineMethod(address, ret, name, ...) DefineMethodWithToc(address, PS3_TOC_BASE, ret, name, __VA_ARGS__)

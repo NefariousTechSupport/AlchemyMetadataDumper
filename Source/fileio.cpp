@@ -47,7 +47,7 @@ int FileWriter::WriteTextf(int n, const char* fmt, ...)
 	va_start(args, n);
 
 	char text[WRITE_BUFFER_SIZE];
-	int res = __stubs::__sprintf(text, fmt, args);
+	int res = __stubs::sprintf(text, fmt, args);
 
 	va_end(args);
 

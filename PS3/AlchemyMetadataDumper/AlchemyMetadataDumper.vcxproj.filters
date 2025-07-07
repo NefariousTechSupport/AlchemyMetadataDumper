@@ -124,20 +124,20 @@
     <ClCompile Include="PS3Common.cpp">
       <Filter>Source Files\PS3</Filter>
     </ClCompile>
-    <ClCompile Include="Imaginators_1_1_0_Addresses.cpp">
-      <Filter>Source Files\Addresses</Filter>
-    </ClCompile>
-    <ClCompile Include="SuperChargers_1_6_0_Addresses.cpp">
-      <Filter>Source Files\Addresses</Filter>
-    </ClCompile>
     <ClCompile Include="PS3fileio.cpp">
       <Filter>Source Files\PS3</Filter>
     </ClCompile>
-    <ClCompile Include="TrapTeam_1_1_0_Addresses.cpp">
-      <Filter>Source Files\Addresses</Filter>
-    </ClCompile>
     <ClCompile Include="asleep.cpp">
       <Filter>Source Files\PS3</Filter>
+    </ClCompile>
+    <ClCompile Include="SKYSC_01_06_00.cpp">
+      <Filter>Source Files\Addresses</Filter>
+    </ClCompile>
+    <ClCompile Include="SKYTT_01_01_00.cpp">
+      <Filter>Source Files\Addresses</Filter>
+    </ClCompile>
+    <ClCompile Include="SKYIM_01_01_00.cpp">
+      <Filter>Source Files\Addresses</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

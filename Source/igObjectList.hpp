@@ -6,19 +6,15 @@
 
 namespace Core
 {
-	template<typename T>
-	class igTObjectList : public igTDataList<T*>
+	class igObjectListVirtuals
 	{
 	public:
-#if TARGET_GAME >= SKYSC_01_00_00 && TARGET_GAME <= SKYIM_01_01_00
-		const auint32_t kVTIndexGetElementType = 0x1C;
-#elif TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-		const auint32_t kVTIndexGetElementType = 0x18;
-#else
-#error "Unimplemented game"
-#endif
+		DefineVirtualFunc_0(igMetaObject*, getElementType);
+	};
 
-		DefineVirtualFunc_0(kVTIndexGetElementType, igMetaObject*, getElementType);
+	template<typename T>
+	class igTObjectList : public igTDataList<T*>, public igObjectListVirtuals
+	{
 	};
 	typedef igTObjectList<igObject> igObjectList;
 }

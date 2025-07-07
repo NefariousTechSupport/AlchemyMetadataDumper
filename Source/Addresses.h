@@ -11,7 +11,7 @@
 //=============================================================================
 namespace __stubs
 {
-	DeclareMethod(int, __sprintf, char* buffer, const char* fmt, ...);
+	DeclareMethod(int, sprintf, char* buffer, const char* fmt, ...);
 }
 
 
