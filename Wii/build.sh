@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -oe pipefail
+
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 
@@ -7,7 +9,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 echo "Compiling dolinject..."
 cd $SCRIPT_DIR/tools/dolinject
 
-mkdir build
+mkdir -p build
 cd build
 
 cmake -S .. -B . -G Ninja

@@ -6,6 +6,7 @@
 #include <inttypes.h>
 #include <assert.h>
 #include <algorithm>
+#include <cstring>
 
 #include "dol.h"
 
@@ -150,13 +151,19 @@ int Inject(const char* gameDol, const char* injectDol, const char* outDol)
 
 	fseek(fGameDol, 0, SEEK_END);
 	uint32_t gameDolSize = ftell(fGameDol);
-	gameHeader.textOffsets[gameFreeText] = gameDolSize;
-	gameHeader.textLengths[gameFreeText] = injectHeader.textLengths[injectText];
-	gameHeader.textLdAddrs[gameFreeText] = injectHeader.textLdAddrs[injectText];
+	memcpy(&gameHeader.textOffsets[1], &gameHeader.textOffsets[0], gameFreeText * sizeof(uint32_t));
+	memcpy(&gameHeader.textLengths[1], &gameHeader.textLengths[0], gameFreeText * sizeof(uint32_t));
+	memcpy(&gameHeader.textLdAddrs[1], &gameHeader.textLdAddrs[0], gameFreeText * sizeof(uint32_t));
+	gameHeader.textOffsets[0] = gameDolSize;
+	gameHeader.textLengths[0] = injectHeader.textLengths[injectText];
+	gameHeader.textLdAddrs[0] = injectHeader.textLdAddrs[injectText];
 
-	gameHeader.dataOffsets[gameFreeData] = gameDolSize + injectHeader.textLengths[injectText];
-	gameHeader.dataLengths[gameFreeData] = injectHeader.dataLengths[injectData];
-	gameHeader.dataLdAddrs[gameFreeData] = injectHeader.dataLdAddrs[injectData];
+	memcpy(&gameHeader.dataOffsets[1], &gameHeader.dataOffsets[0], gameFreeData * sizeof(uint32_t));
+	memcpy(&gameHeader.dataLengths[1], &gameHeader.dataLengths[0], gameFreeData * sizeof(uint32_t));
+	memcpy(&gameHeader.dataLdAddrs[1], &gameHeader.dataLdAddrs[0], gameFreeData * sizeof(uint32_t));
+	gameHeader.dataOffsets[0] = gameDolSize + injectHeader.textLengths[injectText];
+	gameHeader.dataLengths[0] = injectHeader.dataLengths[injectData];
+	gameHeader.dataLdAddrs[0] = injectHeader.dataLdAddrs[injectData];
 
 	gameHeader.bssLength = injectHeader.bssLdAddr + injectHeader.bssLength - gameHeader.bssLdAddr;
 

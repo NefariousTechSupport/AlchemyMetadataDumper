@@ -35,7 +35,7 @@ INCLUDES	:=
 CFLAGS	= -g -Wall $(MACHDEP) $(INCLUDE) -fno-zero-initialized-in-bss
 CXXFLAGS	=	$(CFLAGS)
 
-LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map -Wl,--section-start=.text=$(BASE_TEXT) -Wl,--section-start=.data=$(BASE_DATA) -nostdlib -fno-zero-initialized-in-bss
+LDFLAGS	=	-g $(MACHDEP) -Wl,-Map,$(notdir $@).map -Wl,--section-start=.text=$(BASE_TEXT) -nostdlib -fno-zero-initialized-in-bss
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project

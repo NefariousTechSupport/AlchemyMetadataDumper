@@ -29,7 +29,7 @@
 // .data section, but i couldn't figure that out so we're just avoiding a .bss section.
 //
 // The injected .text and .data sections take the first empty slot
-static constexpr uint32_t sTextBudget = 0x28000;
+static constexpr uint32_t sTextBudget = 0x1000;
 
 
 
@@ -71,7 +71,7 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 	ByteSwapDolHeader(&header);
 
 	// Compute the largest .text vaddr + size
-	uint32_t highestTextLdAddr = 0;
+	/*uint32_t highestTextLdAddr = 0;
 	uint32_t highestTextLength = 0;
 	for (uint8_t i = 0; i < sTextSectionMax; i++)
 	{
@@ -92,14 +92,14 @@ int ComputeBases(const char* inDol, const char* outMakefile)
 			highestDataLdAddr = header.dataLdAddrs[i];
 			highestDataLength = header.dataLengths[i];
 		}
-	}
+	}*/
 
 	// Compute the base addresses and align to 0x100
-	uint32_t textBaseAddress = ALIGN_FOR_SECTION(highestTextLdAddr + highestTextLength);
-	uint32_t dataBaseAddress = ALIGN_FOR_SECTION(highestDataLdAddr + highestDataLength);
-	uint32_t  bssBaseAddress = ALIGN_FOR_SECTION(header.bssLdAddr  + header.bssLength);
+	//uint32_t textBaseAddress = ALIGN_FOR_SECTION(highestTextLdAddr + highestTextLength);
+	//uint32_t dataBaseAddress = ALIGN_FOR_SECTION(highestDataLdAddr + highestDataLength);
+	//uint32_t  bssBaseAddress = ALIGN_FOR_SECTION(header.bssLdAddr  + header.bssLength);
 
-	uint32_t realBaseAddress = std::max(textBaseAddress, std::max(dataBaseAddress, bssBaseAddress));
+	uint32_t realBaseAddress = 0x80001000;//std::max(textBaseAddress, std::max(dataBaseAddress, bssBaseAddress));
 
 	char output[1024];
 	int outputLength = snprintf(output, sizeof(output),
