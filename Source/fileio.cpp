@@ -22,6 +22,7 @@ FileWriter::FileWriter(const char* filepath)
 	platformTruncateFile(filepath);
 }
 
+#if !TARGET_WII // Neffy - Codwarriors compiler inserts calls to operator delete, which we lack
 FileWriter::~FileWriter()
 {
 	if(_handle)
@@ -29,6 +30,7 @@ FileWriter::~FileWriter()
 		platformCloseHandle();
 	}
 }
+#endif // !TARGET_WII
 
 int FileWriter::WriteText(int len, const char* text)
 {

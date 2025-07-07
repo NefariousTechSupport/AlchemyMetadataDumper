@@ -28,7 +28,9 @@ class FileWriter
 {
 public:
 	explicit FileWriter(const char* filepath);
+#if !TARGET_WII // Neffy - Codwarriors compiler inserts calls to operator delete, which we lack
 	~FileWriter();
+#endif // !TARGET_WII
 
 	int WriteText(int len, const char* text);
 	int WriteTextf(int n, const char* fmt, ...);
