@@ -26,7 +26,7 @@ LINKER              = $(ALCHEMY_KAMEK_PATH)/Kamek/bin/Debug/net6.0/Kamek
 #---------------------------------------------------------------------------------
 CPPSOURCES           =
 # Kamek Loader Sources
-CPPSOURCES          += $(ALCHEMY_KAMEK_PATH)/loader/kamekLoader.cpp
+CPPSOURCES          +=
 # Common Metadata Dumper Sources
 CPPSOURCES          += Source/fileio.cpp         \
                        Source/igMetaField.cpp    \

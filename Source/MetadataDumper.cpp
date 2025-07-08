@@ -24,6 +24,8 @@
 #define DEBUGPRINTF(fmt, ...)
 #endif // DEBUG_LOGS
 
+static Core::igMetaField defaultMetaField = {};
+
 bool streq(const char* a, const char* b)
 {
 	while(*a)
@@ -342,20 +344,8 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 				else
 				{
 					Core::igObjectRefMetaField hackyhacky;
+					*reinterpret_cast<Core::igMetaField*>(&hackyhacky) = defaultMetaField;
 					hackyhacky._vTable = objectRefMetaObject->_vTablePointer;
-					hackyhacky._properties._copyMethod = 3;
-					hackyhacky._properties._resetMethod = 3;
-					hackyhacky._properties._isAlikeMethod = 3;
-					hackyhacky._properties._itemsCopyMethod = 3;
-					hackyhacky._properties._keysCopyMethod = 3;
-					hackyhacky._properties._requiredAlignment = sizeof(Core::igObjectRefMetaField*);
-					hackyhacky._properties._persistent = 1;
-					hackyhacky._properties._hasInvariance = 0;
-					hackyhacky._properties._hasPoolName = 0;
-					hackyhacky._properties._mutable = 0;
-					hackyhacky._properties._implicitAlignment = 1;
-					hackyhacky._default._buffer = 0;
-					hackyhacky._default._size = 0;
 					hackyhacky._construct = false;
 					hackyhacky._destruct = false;
 					hackyhacky._reconstruct = false;
@@ -376,21 +366,8 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 			}
 			else
 			{
-				Core::igMetaField hackyhacky;
+				Core::igMetaField hackyhacky = defaultMetaField;
 				hackyhacky._vTable = ucharMetaObject->_vTablePointer;
-				hackyhacky._properties._copyMethod = 3;
-				hackyhacky._properties._resetMethod = 3;
-				hackyhacky._properties._isAlikeMethod = 3;
-				hackyhacky._properties._itemsCopyMethod = 3;
-				hackyhacky._properties._keysCopyMethod = 3;
-				hackyhacky._properties._requiredAlignment = 1;
-				hackyhacky._properties._persistent = 1;
-				hackyhacky._properties._hasInvariance = 0;
-				hackyhacky._properties._hasPoolName = 0;
-				hackyhacky._properties._mutable = 0;
-				hackyhacky._properties._implicitAlignment = 1;
-				hackyhacky._default._buffer = 0;
-				hackyhacky._default._size = 0;
 				DumpMetaField(writer, indent + 1, &hackyhacky);
 			}
 		}
@@ -403,21 +380,8 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 			}
 			else
 			{
-				Core::igMetaField hackyhacky;
+				Core::igMetaField hackyhacky = defaultMetaField;
 				hackyhacky._vTable = ucharMetaObject->_vTablePointer;
-				hackyhacky._properties._copyMethod = 3;
-				hackyhacky._properties._resetMethod = 3;
-				hackyhacky._properties._isAlikeMethod = 3;
-				hackyhacky._properties._itemsCopyMethod = 3;
-				hackyhacky._properties._keysCopyMethod = 3;
-				hackyhacky._properties._requiredAlignment = 1;
-				hackyhacky._properties._persistent = 1;
-				hackyhacky._properties._hasInvariance = 0;
-				hackyhacky._properties._hasPoolName = 0;
-				hackyhacky._properties._mutable = 0;
-				hackyhacky._properties._implicitAlignment = 1;
-				hackyhacky._default._buffer = 0;
-				hackyhacky._default._size = 0;
 				DumpMetaField(writer, indent + 1, &hackyhacky);
 			}
 		}
@@ -678,6 +642,21 @@ void MetadataDumperThread()
 	asleep(10000);
 
 	_igReportPrintf("dumping metadata now\n");
+
+	defaultMetaField._vTable = 0;
+	defaultMetaField._properties._copyMethod = 3;
+	defaultMetaField._properties._resetMethod = 3;
+	defaultMetaField._properties._isAlikeMethod = 3;
+	defaultMetaField._properties._itemsCopyMethod = 3;
+	defaultMetaField._properties._keysCopyMethod = 3;
+	defaultMetaField._properties._requiredAlignment = 1;
+	defaultMetaField._properties._persistent = 1;
+	defaultMetaField._properties._hasInvariance = 0;
+	defaultMetaField._properties._hasPoolName = 0;
+	defaultMetaField._properties._mutable = 0;
+	defaultMetaField._properties._implicitAlignment = 1;
+	defaultMetaField._default._buffer = 0;
+	defaultMetaField._default._size = 0;
 
 	// Order is essential
 	DumpMetaObjects();     // Generates some of the metaenums when we call _getMetaEnum
