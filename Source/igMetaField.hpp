@@ -31,19 +31,35 @@ namespace Core
 	class igMetaField : public igObject
 	{
 	public:
-		auint16_t _parentMetaObjectIndex;	//0x08
-		aint16_t _typeIndex;					//0x0A
-		aint16_t _internalIndex;				//0x0C
-		auint16_t _size;						//0x0E
-		auint16_t _offset;					//0x10
-		igObjectList* _attributes;			//0x14
+#if TARGET_GAME >= SKYTT_BEGIN
+		auint16_t _parentMetaObjectIndex;   //0x08
+		aint16_t _typeIndex;                //0x0A
+		aint16_t _internalIndex;            //0x0C
+		auint16_t _size;                    //0x0E
+		auint16_t _offset;                  //0x10
+		igObjectList* _attributes;          //0x14
 		union
 		{
 			fieldProperties _properties;
 			auint32_t _propertiesBitfield;
 		};
-		char * _fieldName;					//0x1C
-		igMemory<auint8_t> _default;			//0x20
+		char* _fieldName;                   //0x1C
+		igMemory<auint8_t> _default;        //0x20
+#else
+		union
+		{
+			fieldProperties _properties;
+			auint32_t _propertiesBitfield;
+		};
+		char* _fieldName;                   //0x0C
+		auint16_t _offset;                  //0x10
+		auint16_t _parentMetaObjectIndex;   //0x12
+		aint16_t _typeIndex;                //0x14
+		aint16_t _internalIndex;            //0x16
+		auint16_t _size;                    //0x18
+		igObjectList* _attributes;          //0x1C
+		igMemory<auint8_t> _default;        //0x20
+#endif // TARGET_GAME >= SKYTT_BEGIN
 
 		inline const char* getStringFromMemory(void* memory, igObject* directory)
 		{

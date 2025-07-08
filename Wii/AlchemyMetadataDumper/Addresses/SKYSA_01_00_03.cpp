@@ -22,7 +22,7 @@
 // __internalObjectBase
 const auint32_t Core::__internalObjectBase::kVTIndex_getMeta            = 0;
 
-// igObject
+// igObject, not checked these
 const auint32_t Core::igObject::kVTIndex_isAlikeDeep                    = 1;
 const auint32_t Core::igObject::kVTIndex_userAllocateFields             = 2;
 const auint32_t Core::igObject::kVTIndex_userDeallocateFields           = 3;
@@ -44,22 +44,22 @@ const auint32_t Core::igObject::kVTIndex_writeItemToStream              = 18;
 const auint32_t Core::igObject::kVTIndex_clean                          = 19;
 
 // igObjectList
-const auint32_t Core::igObjectListVirtuals::kVTIndex_getElementType     = 0x18;
+const auint32_t Core::igObjectListVirtuals::kVTIndex_getElementType     = 0x12;
 
 // igMetaField
-const auint32_t Core::igMetaField::kVTIndex_getGenericMetaField         = 0x11;
-const auint32_t Core::igMetaField::kVTIndex_computeSize                 = 0x1A;
-const auint32_t Core::igMetaField::kVTIndex_computePlatformSize         = 0x1B;
-const auint32_t Core::igMetaField::kVTIndex_computeRequiredAlignment    = 0x1E;
-const auint32_t Core::igMetaField::kVTIndex_computePlatformAlignment    = 0x1F;
-const auint32_t Core::igMetaField::kVTIndex_getStringFromMemory         = 0x3E;
-const auint32_t Core::igMetaField::kVTIndex_getTemplateParameterCount   = 0x4B;
-const auint32_t Core::igMetaField::kVTIndex_getTemplateParameter        = 0x4C;
+const auint32_t Core::igMetaField::kVTIndex_getGenericMetaField         = 0x13; // Confirmed
+const auint32_t Core::igMetaField::kVTIndex_computeSize                 = 0x16; // Confirmed
+const auint32_t Core::igMetaField::kVTIndex_computePlatformSize         = 0x17; // Maybe??
+const auint32_t Core::igMetaField::kVTIndex_computeRequiredAlignment    = 0x18; // Likely
+const auint32_t Core::igMetaField::kVTIndex_computePlatformAlignment    = 0x1F; // Unknown
+const auint32_t Core::igMetaField::kVTIndex_getStringFromMemory         = 0x38; // Confirmed
+const auint32_t Core::igMetaField::kVTIndex_getTemplateParameterCount   = 0x43; // Unlikely, more likely that it's not a virtual method
+const auint32_t Core::igMetaField::kVTIndex_getTemplateParameter        = 0x44; // Unlikely, more likely that it's not a virtual method
 
 
 // igHashTable
-const auint32_t Core::igHashTableVirtuals::kVTIndex_keyTraitsInvalid    = 0x18;
-const auint32_t Core::igHashTableVirtuals::kVTIndex_valueTraitsInvalid  = 0x1B;
+const auint32_t Core::igHashTableVirtuals::kVTIndex_keyTraitsInvalid    = 0x18; // Unknown
+const auint32_t Core::igHashTableVirtuals::kVTIndex_valueTraitsInvalid  = 0x1B; // Unknown
 
 
 
@@ -68,10 +68,10 @@ const auint32_t Core::igHashTableVirtuals::kVTIndex_valueTraitsInvalid  = 0x1B;
 //=============================================================================
 // Function addresses
 //=============================================================================
-DefineMethod(0x00496150, int,                 __stubs::sprintf,              char*, const char*, ...);
-DefineMethod(0x001B3864, bool,                Core::igMetaObject_isOfType,   const Core::igMetaObject*, const Core::igMetaObject*);
-DefineMethod(0x001A67FC, Core::igMetaObject*, Core::igArkCore_getObjectMeta, Core::igArkCore*, const char*);
-DefineMethod(0x001E0B90, int,                 _igReportPrintf,               const char*, ...);
+DefineMethod(0x803571CC, int,                 __stubs::sprintf,              char*, const char*, ...);
+DefineMethod(0x800E398C, bool,                Core::igMetaObject_isOfType,   const Core::igMetaObject*, const Core::igMetaObject*);
+DefineMethod(0x800D8F9C, Core::igMetaObject*, Core::igArkCore_getObjectMeta, Core::igArkCore*, const char*);
+DefineMethod(0x80112DB4, int,                 _igReportPrintf,               const char*, ...);
 
 
 
@@ -80,7 +80,7 @@ DefineMethod(0x001E0B90, int,                 _igReportPrintf,               con
 //=============================================================================
 // Global variables
 //=============================================================================
-static const asize_t Core_ArkCore                     = 0x009850fc;
+static const asize_t Core_ArkCore                     = 0x8066aa94;
 static const asize_t Core_MetaFieldList               = 0x0098517c;
 
 Core::igArkCore* __internalGetArkCore()

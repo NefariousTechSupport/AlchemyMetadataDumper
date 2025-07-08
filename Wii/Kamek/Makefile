@@ -61,7 +61,7 @@ INCLUDES           += Wii/Kamek Wii/AlchemyMetadataDumper
 #---------------------------------------------------------------------------------
 # Compile flags
 #---------------------------------------------------------------------------------
-CPPFLAGS            = -Cpp_exceptions off -enum int -Os -use_lmw_stmw on -fp hard -rostr -sdata 0 -sdata2 0 -msgstyle gcc
+CPPFLAGS            = -Cpp_exceptions off -RTTI off -enum int -Os -use_lmw_stmw on -fp hard -rostr -sdata 0 -sdata2 0 -msgstyle gcc
 DEFINES             = -DTARGET_WII=1 -DTARGET_GAME=$(TARGET_GAME)
 INCFLAGS            = $(foreach include,$(INCLUDES), -i $(include))
 
@@ -74,7 +74,7 @@ INCFLAGS            = $(foreach include,$(INCLUDES), -i $(include))
 #---------------------------------------------------------------------------------
 OFILES              = $(foreach source,$(CPPSOURCES), wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(source:.cpp=.o)))
 COMPILE_COMMANDS    = $(foreach source,$(CPPSOURCES),mkdir -p wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(dir $(source))) ; $(CC) $(DEFINES) -I- $(INCFLAGS) $(CPPFLAGS) -o wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(source:.cpp=.o)) -c $(source) ;)
-LINK_COMMAND        = $(LINKER) $(OFILES) -static=0x80001000 -output-code=wiibuild/loader.bin -output-riiv=wiibuild/loader.xml -valuefile=Code/loader.bin
+LINK_COMMAND        = $(LINKER) $(OFILES) -static=0x80001000 -output-code=wiibuild/loader.bin -output-riiv=wiibuild/loader.xml -valuefile=Code/loader.bin -output-map=wiibuild/file.md.map
 
 
 
