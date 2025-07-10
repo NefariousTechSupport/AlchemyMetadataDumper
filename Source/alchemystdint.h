@@ -24,6 +24,7 @@ typedef long           aint64_t;
 // We don't support 64 bit platforms yet
 typedef auint32_t      asize_t;
 
+typedef auint8_t       avtindex_t;
 
 
 

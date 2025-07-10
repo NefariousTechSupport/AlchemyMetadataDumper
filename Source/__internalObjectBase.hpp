@@ -12,7 +12,7 @@
 #define CallVirtualFunc_2(index, ret, type0, value0, type1, value1) ((ret(*)(void*, type0, type1))GetVirtualFunc(reinterpret_cast<const __internalObjectBase*>(this)->_vTable, index))(this, value0, value1)
 
 #define DeclareVirtualFunc(name)                                               \
-	static const auint32_t kVTIndex_##name
+	static const avtindex_t kVTIndex_##name
 
 #define DefineVirtualFunc_0(ret, name)                                         \
 	DeclareVirtualFunc(name);                                                  \
