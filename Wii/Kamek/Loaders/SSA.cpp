@@ -4,13 +4,20 @@ int loadIntoSSA();
 
 #define ALCHEMY_KAMEK_DEFAULT_POOL 6
 
-kmCondWritePointer(0x804CF8D0, 0x00000000, loadIntoSSA); // EU rev3, adds to the end of the initialisers array
+//kmCondWritePointer(0x804CF8D0, 0x00000000, loadIntoSSA); // EU rev3, adds to the end of the initialisers array
+kmBranchDefCpp(0x800D69E8, NULL, u32, u32 initialReturn)
+{
+	loadIntoSSA();
+	return initialReturn;
+}
 
 void* allocAdapter(u32 size, bool isForCode, const loaderFunctions* funcs)
 {
 	const alchemyLoaderFuncs* alchemyFuncs = reinterpret_cast<const alchemyLoaderFuncs*>(funcs);
 	void* memoryPool = alchemyFuncs->igGetMemoryPool(ALCHEMY_KAMEK_DEFAULT_POOL);
-	return alchemyFuncs->igMemoryPool_mallocAligned(memoryPool, size, 0x100);
+	void* mem = alchemyFuncs->igMemoryPool_mallocAligned(memoryPool, size, 0x100);
+	funcs->OSReport("Allocated %x bytes at %p\n", size, mem);
+	return mem;
 }
 
 void freeAdapter(void* buffer, bool isForCode, const loaderFunctions *funcs)

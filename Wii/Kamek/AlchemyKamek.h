@@ -24,7 +24,7 @@
 
 	Core::igObject::printFields will also call sprintf with the fmt arg "\t%s".
 
-	I don't know how to find OSReport so there's a placeholder implementation.
+	I don't know how to find OSFatal so there's a placeholder implementation.
 
 	Core::igMemoryPool::mallocAligned can be found by looking for the string
 	"Core/@jobqueueProfileEventCount", find what references it, the next method

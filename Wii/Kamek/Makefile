@@ -15,7 +15,7 @@ endif
 
 
 CC                  = $(ALCHEMY_KAMEK_PATH)/cw/mwcceppc.exe
-LINKER              = $(ALCHEMY_KAMEK_PATH)/Kamek/bin/Debug/net6.0/Kamek
+LINKER              = $(ALCHEMY_KAMEK_PATH)/Kamek/bin/Debug/net6.0/Kamek.exe
 
 
 
@@ -24,17 +24,22 @@ LINKER              = $(ALCHEMY_KAMEK_PATH)/Kamek/bin/Debug/net6.0/Kamek
 #---------------------------------------------------------------------------------
 # Sources
 #---------------------------------------------------------------------------------
-CPPSOURCES           =
-# Kamek Loader Sources
-CPPSOURCES          +=
+# Kamek Loader sources
+LOADER_SOURCES       =
+# Kamek sources
+LOADER_SOURCES      += $(ALCHEMY_KAMEK_PATH)/loader/kamekLoader.cpp
+# Game Loader
+LOADER_SOURCES      += Wii/Kamek/AlchemyKamek.cpp                             \
+                       Wii/Kamek/Loaders/$(GAME).cpp
+
+# Payload sources
+PAYLOAD_SOURCES       =
 # Common Metadata Dumper Sources
-CPPSOURCES          += Source/fileio.cpp         \
+PAYLOAD_SOURCES     += Source/fileio.cpp         \
                        Source/igMetaField.cpp    \
                        Source/MetadataDumper.cpp
 # Wii Metadata Dumper Sources
-CPPSOURCES          += Wii/Kamek/AlchemyKamek.cpp                             \
-                       Wii/Kamek/Loaders/$(GAME).cpp                          \
-                       Wii/AlchemyMetadataDumper/Addresses/$(TARGET_GAME).cpp \
+PAYLOAD_SOURCES     += Wii/AlchemyMetadataDumper/Addresses/$(TARGET_GAME).cpp \
                        Wii/AlchemyMetadataDumper/Wiifileio.cpp                \
                        Wii/AlchemyMetadataDumper/WiiCommon.cpp                \
                        Wii/AlchemyMetadataDumper/asleep.cpp
@@ -72,13 +77,16 @@ INCFLAGS            = $(foreach include,$(INCLUDES), -i $(include))
 #---------------------------------------------------------------------------------
 # Compile commands
 #---------------------------------------------------------------------------------
-OFILES              = $(foreach source,$(CPPSOURCES), wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(source:.cpp=.o)))
-COMPILE_COMMANDS    = $(foreach source,$(CPPSOURCES),mkdir -p wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(dir $(source))) ; $(CC) $(DEFINES) -I- $(INCFLAGS) $(CPPFLAGS) -o wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(source:.cpp=.o)) -c $(source) ;)
-LINK_COMMAND        = $(LINKER) $(OFILES) -static=0x80001000 -output-code=wiibuild/loader.bin -output-riiv=wiibuild/loader.xml -valuefile=Code/loader.bin -output-map=wiibuild/file.md.map
+LOADER_OFILES        = $(foreach source,$(LOADER_SOURCES),  wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(source:.cpp=.o)))
+PAYLOAD_OFILES       = $(foreach source,$(PAYLOAD_SOURCES), wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(source:.cpp=.o)))
+COMPILE_COMMANDS     = $(foreach source,$(LOADER_SOURCES) $(PAYLOAD_SOURCES), mkdir -p wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(dir $(source))) ; $(CC) $(DEFINES) -I- $(INCFLAGS) $(CPPFLAGS) -o wiibuild/$(shell realpath -m --relative-base=$(ALCHEMY_KAMEK_PATH) $(source:.cpp=.o)) -c $(source) ;)
+PAYLOAD_LINK_COMMAND = $(LINKER) $(PAYLOAD_OFILES) -dynamic -output-kamek=wiibuild/payload.bin -output-map=wiibuild/payload.map
+LOADER_LINK_COMMAND  = $(LINKER) $(LOADER_OFILES)  -static=0x80001900 -output-code=wiibuild/loader.bin -output-riiv=wiibuild/loader.xml -valuefile=Code/loader.bin -output-map=wiibuild/loader.map
 
 
 
 
 execute-list:
 	$(foreach x,$(COMPILE_COMMANDS),$(x))
-	$(LINK_COMMAND)
+	$(LOADER_LINK_COMMAND)
+	$(PAYLOAD_LINK_COMMAND)
