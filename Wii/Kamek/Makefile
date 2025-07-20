@@ -40,9 +40,10 @@ PAYLOAD_SOURCES     += Source/fileio.cpp         \
                        Source/MetadataDumper.cpp
 # Wii Metadata Dumper Sources
 PAYLOAD_SOURCES     += Wii/AlchemyMetadataDumper/Addresses/$(TARGET_GAME).cpp \
-                       Wii/AlchemyMetadataDumper/Wiifileio.cpp                \
+                       Wii/AlchemyMetadataDumper/asleep.cpp                   \
+                       Wii/AlchemyMetadataDumper/Payload.cpp                  \
                        Wii/AlchemyMetadataDumper/WiiCommon.cpp                \
-                       Wii/AlchemyMetadataDumper/asleep.cpp
+                       Wii/AlchemyMetadataDumper/Wiifileio.cpp
 
 
 
