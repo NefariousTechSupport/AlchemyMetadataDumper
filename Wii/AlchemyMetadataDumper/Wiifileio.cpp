@@ -23,6 +23,7 @@ void FileWriter::platformCloseHandle()
 
 aint32_t FileWriter::platformWriteFile(const char* data, aint32_t len)
 {
-	return _igReportPrintf("%s", data);
+	_igReportPrintf("%s", data);
+	return len;
 }
 
