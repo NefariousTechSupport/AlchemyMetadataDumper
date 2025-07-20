@@ -2,7 +2,8 @@
 
 int loadIntoSSA();
 
-#define ALCHEMY_KAMEK_DEFAULT_POOL 6
+// This is the system pool
+#define ALCHEMY_KAMEK_POOL 1
 
 //kmCondWritePointer(0x804CF8D0, 0x00000000, loadIntoSSA); // EU rev3, adds to the end of the initialisers array
 kmBranchDefAsm(0x800D69E8, NULL)
@@ -158,7 +159,7 @@ kmBranchDefAsm(0x800D69E8, NULL)
 void* allocAdapter(u32 size, bool isForCode, const loaderFunctions* funcs)
 {
 	const alchemyLoaderFuncs* alchemyFuncs = reinterpret_cast<const alchemyLoaderFuncs*>(funcs);
-	void* memoryPool = alchemyFuncs->igGetMemoryPool(ALCHEMY_KAMEK_DEFAULT_POOL);
+	void* memoryPool = alchemyFuncs->igGetMemoryPool(ALCHEMY_KAMEK_POOL);
 	void* mem = alchemyFuncs->igMemoryPool_mallocAligned(memoryPool, size, 0x100);
 	funcs->OSReport("Allocated %x bytes at %p\n", size, mem);
 	return mem;
@@ -167,7 +168,7 @@ void* allocAdapter(u32 size, bool isForCode, const loaderFunctions* funcs)
 void freeAdapter(void* buffer, bool isForCode, const loaderFunctions *funcs)
 {
 	const alchemyLoaderFuncs* alchemyFuncs = reinterpret_cast<const alchemyLoaderFuncs*>(funcs);
-	void* memoryPool = alchemyFuncs->igGetMemoryPool(ALCHEMY_KAMEK_DEFAULT_POOL);
+	void* memoryPool = alchemyFuncs->igGetMemoryPool(ALCHEMY_KAMEK_POOL);
 	alchemyFuncs->igMemoryPool_free(memoryPool, buffer);
 }
 
