@@ -37,9 +37,7 @@ namespace Core
 #endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
 #else // TARGET_GAME >= SKYTT_BEGIN
 		aint32_t _id;
-private:
 		const char* _name;
-public:
 		igTVector<igMetaField*> _metaFields;
 		aint32_t _instanceCount;
 		aint32_t _sizeofSize;
@@ -57,15 +55,6 @@ public:
 		inline bool isOfType(const igMetaObject* other) const
 		{
 			return Core::igMetaObject_isOfType(this, other);
-		}
-
-		inline const char* getName()
-		{
-			asize_t name = reinterpret_cast<asize_t>(_name);
-#if TARGET_WII // They use the most significant bit to store something on wii
-			name = name | 0x80000000;
-#endif // TARGET_WII
-			return reinterpret_cast<const char*>(name);
 		}
 	};
 }
