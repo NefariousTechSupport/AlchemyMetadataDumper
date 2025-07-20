@@ -69,17 +69,17 @@ void DumpMetaEnums()
 			continue;
 		}
 
-		if (!platformMetaEnum && streq(metaEnum->_name, "IG_CORE_PLATFORM"))
+		if (!platformMetaEnum && streq(metaEnum->getName(), "IG_CORE_PLATFORM"))
 		{
 			platformMetaEnum = metaEnum;
 		}
 		
-		WriteFormattedText(writer, "\t<metaenum refname=\"%s\">\n", metaEnum->_name);
+		WriteFormattedText(writer, "\t<metaenum refname=\"%s\">\n", metaEnum->getName());
 		for(int j = 0; j < metaEnum->_names->_count; j++)
 		{
 			WriteFormattedText(writer, "\t\t<value name=\"%s\" value=\"%d\"/>\n", metaEnum->_names->get(j), metaEnum->_values->get(j));
 		}
-		WriteFormattedText(writer, "\t</metaenum>\n", metaEnum->_name);
+		WriteFormattedText(writer, "\t</metaenum>\n", metaEnum->getName());
 	}
 	writer.WriteText(12, "</metaenums>");
 }
@@ -95,7 +95,7 @@ void DumpMetaFieldList()
 	for (int t = 0; t < ArkCoreMetaFieldList->_count; t++)
 	{
 		Core::igMetaField* field = ArkCoreMetaFieldList->get(t);
-		WriteFormattedTextIndented(writer, 1, "<metafield name=\"%s\">\n", field->getMeta()->_name);
+		WriteFormattedTextIndented(writer, 1, "<metafield name=\"%s\">\n", field->getMeta()->getName());
 
 		for (int i = 0; i < platformMetaEnum->_names->_count; i++)
 		{
@@ -151,13 +151,13 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	                           indent,
 	                           "<metafield type=\"%s\""
 	                           " offset=\"0x%04X\"",
-	                           metafield->getMeta()->_name,
+	                           metafield->getMeta()->getName(),
 	                           metafield->_offset
 	                           );
 
-	if (root && metafield->_fieldName)
+	if (root && metafield->getName())
 	{
-		WriteFormattedText(writer, " name=\"%s\"", metafield->_fieldName);
+		WriteFormattedText(writer, " name=\"%s\"", metafield->getName());
 	}
 
 	if (metafield->_properties._copyMethod != 3)
@@ -219,14 +219,14 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (fieldType->isOfType(objectRefMetaObject))
 	{
 		WriteFormattedText(writer, " metaobject=\"%s\"", 
-			((Core::igObjectRefMetaField*)metafield)->_metaObject ? ((Core::igObjectRefMetaField*)metafield)->_metaObject->_name : "igObject"
+			((Core::igObjectRefMetaField*)metafield)->_metaObject ? ((Core::igObjectRefMetaField*)metafield)->_metaObject->getName() : "igObject"
 			);
 	}
 
 	if (fieldType->isOfType(handleMetaObject))
 	{
 		WriteFormattedText(writer, " metaobject=\"%s\"", 
-			((Core::igHandleMetaField*)metafield)->_metaObject ? ((Core::igHandleMetaField*)metafield)->_metaObject->_name : "igObject"
+			((Core::igHandleMetaField*)metafield)->_metaObject ? ((Core::igHandleMetaField*)metafield)->_metaObject->getName() : "igObject"
 			);
 	}
 
@@ -242,7 +242,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 		                   " shift=\"0x%02X\" bits=\"0x%02X\" storageField=\"%s\" assignmentField=\"f0\"",
 		                   ((Core::igBitFieldMetaField*)metafield)->_shift,
 		                   ((Core::igBitFieldMetaField*)metafield)->_bits,
-		                   ((Core::igBitFieldMetaField*)metafield)->_storageMetaField->_fieldName
+		                   ((Core::igBitFieldMetaField*)metafield)->_storageMetaField->getName()
 		                   );
 		hasChildNodes = true;
 	}
@@ -252,7 +252,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 		Core::igMetaEnum*(*getMetaEnumFunc)() = ((Core::igEnumMetaField*)metafield)->_getMetaEnumFunction;
 		WriteFormattedText(writer,
 		                   " metaenum=\"%s\"",
-		                   getMetaEnumFunc ? getMetaEnumFunc()->_name : "(null)"
+		                   getMetaEnumFunc ? getMetaEnumFunc()->getName() : "(null)"
 		                   );
 	}
 
@@ -302,7 +302,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	// Check for array metafields
 	// Cursed way to do a logical AND
 	if (Core::igMetaField* numField = fieldType->_metaFields.get(fieldType->_metaFields._count - 1))
-	if (streq(numField->_fieldName, "_num"))
+	if (streq(numField->getName(), "_num"))
 	{
 		DEBUGPRINTF("Located num metafield at %08X, num field at %02X\n", numField, numField->_offset);
 		WriteFormattedText(writer, " num=\"%d\"", *(int*)(((asize_t)metafield) + numField->_offset))
@@ -413,6 +413,8 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 {
 	char buf[512];
 	int len;
+	
+	DEBUGPRINTF("Dumping metaobject %p\n", meta);
 
 	static const Core::igMetaObject* dotnetObjectType           = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetMetaObject");
 	static const Core::igMetaObject* dynamicObjectType          = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaObject");
@@ -446,12 +448,12 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 		DumpMetaObject(writer, meta->_parent);
 	}
 
-	DEBUGPRINTF("dumping metaobject %s\n", meta->_name);
+	DEBUGPRINTF("dumping metaobject %s\n", meta->getName());
 
-	WriteFormattedText(writer, "\t<metaobject type=\"%s\" refname=\"%s\"", meta->getMeta()->_name, meta->_name);
+	WriteFormattedText(writer, "\t<metaobject type=\"%s\" refname=\"%s\"", meta->getMeta()->getName(), meta->getName());
 	if (meta->_parent)
 	{
-		WriteFormattedText(writer, " basetype=\"%s\"", meta->_parent->_name);
+		WriteFormattedText(writer, " basetype=\"%s\"", meta->_parent->getName());
 	}
 	writer.WriteText(2, ">\n");
 
@@ -472,7 +474,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 				writer.WriteText(25, "\t\t<overriddenmetafields>\n");
 			}
 			overrideFieldsCount++;
-			DEBUGPRINTF("dumping metafield %s::%s\n", meta->_name, meta->_metaFields.get(i)->_fieldName);
+			DEBUGPRINTF("dumping metafield %s::%s\n", meta->getName(), meta->_metaFields.get(i)->getName());
 			DumpMetaField(writer, 3, meta->_metaFields.get(i), true);
 		}
 		if (overrideFieldsCount > 0)
@@ -508,7 +510,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 				elementType = ((Core::igMetaObject*(*)(Core::igObjectList*))GetVirtualFunc(meta->_vTablePointer, Core::igObjectList::kVTIndex_getElementType))(0);
 			}
 
-			WriteFormattedTextIndented(writer, 2, "<objectlist elementtype=\"%s\"/>\n", elementType->_name);
+			WriteFormattedTextIndented(writer, 2, "<objectlist elementtype=\"%s\"/>\n", elementType->getName());
 		}
 		else if (meta->isOfType(hashTableMetaObject) && meta != hashTableMetaObject)
 		{
@@ -537,7 +539,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	}
 	for (int i = fieldStart; i < meta->_metaFields._count; i++)
 	{
-		DEBUGPRINTF("dumping metafield %s::%s\n", meta->_name, meta->_metaFields.get(i)->_fieldName);
+		DEBUGPRINTF("dumping metafield %s::%s\n", meta->getName(), meta->_metaFields.get(i)->getName());
 		DumpMetaField(writer, 3, meta->_metaFields.get(i), true);
 	}
 	if (meta->_metaFields._count - fieldStart > 0)
@@ -586,7 +588,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			{
 				tfbScript::tfbScriptObject* binding = list->get(b);
 
-				WriteFormattedTextIndented(writer, 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->_name, binding->_name);
+				WriteFormattedTextIndented(writer, 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), binding->_name);
 			}
 
 			writer.WriteText(17, "\t\t</tfbBindings>\n");
@@ -617,6 +619,9 @@ void DumpMetaObjects()
 	FileWriter writer = FileWriter("metaobjects.xml");
 	writer.WriteText(14, "<metaobjects>\n");
 
+	DEBUGPRINTF("ArkCore at %p\n", ArkCore);
+	DEBUGPRINTF("ArkCore->_metaObjectHashTable at %p\n", ArkCore->_metaObjectHashTable);
+	DEBUGPRINTF("ArkCore->_metaObjectHashTable->_values at %p\n", ArkCore->_metaObjectHashTable->_values._buffer);
 	Core::igMemory<Core::igMetaObject*>& metaObjects = ArkCore->_metaObjectHashTable->_values;
 	for (int i = 0; i < metaObjects._size / sizeof(Core::igMetaObject*); i++)
 	{
@@ -628,6 +633,8 @@ void DumpMetaObjects()
 		{
 			continue;
 		}
+
+		DEBUGPRINTF("At address %p with index %d with metaobject %p\n", metaObjects._buffer + i, i, meta);
 
 		DumpMetaObject(writer, meta);
 	}

@@ -16,11 +16,22 @@ namespace Core
 	public:
 		bool _flags;
 #if TARGET_GAME < SKYTT_BEGIN
+	private:
 		const char* _name;
+	public:
 #endif // TARGET_GAME < SKYSA_END
 		igTDataList<const char*>* _names;
 		igTDataList<aint32_t>* _values;
 		igObjectList* _attributes;
 		igObjectList* _valueAttributes;
+
+		inline const char* getName()
+		{
+			asize_t name = reinterpret_cast<asize_t>(_name);
+#if TARGET_WII // They use the most significant bit to store something on wii
+			name = name | 0x80000000;
+#endif // TARGET_WII
+			return reinterpret_cast<const char*>(name);
+		}
 	};
 }

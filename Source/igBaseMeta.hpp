@@ -6,7 +6,7 @@ namespace Core
 {
 	class igBaseMeta : public igObject
 	{
-	public:
-		char* _name;
+protected:
+		const char* _name;
 	};
 }

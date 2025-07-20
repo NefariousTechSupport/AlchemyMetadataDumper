@@ -43,7 +43,9 @@ namespace Core
 			fieldProperties _properties;
 			auint32_t _propertiesBitfield;
 		};
+	private:
 		char* _fieldName;                   //0x1C
+	public:
 		igMemory<auint8_t> _default;        //0x20
 #else
 		union
@@ -51,7 +53,9 @@ namespace Core
 			fieldProperties _properties;
 			auint32_t _propertiesBitfield;
 		};
+	private:
 		char* _fieldName;                   //0x0C
+	public:
 		auint16_t _offset;                  //0x10
 		auint16_t _parentMetaObjectIndex;   //0x12
 		aint16_t _typeIndex;                //0x14
@@ -60,6 +64,15 @@ namespace Core
 		igObjectList* _attributes;          //0x1C
 		igMemory<auint8_t> _default;        //0x20
 #endif // TARGET_GAME >= SKYTT_BEGIN
+
+		inline const char* getName()
+		{
+			asize_t name = reinterpret_cast<asize_t>(_fieldName);
+#if TARGET_WII // They use the most significant bit to store something on wii
+			name = name | 0x80000000;
+#endif // TARGET_WII
+			return reinterpret_cast<const char*>(name);
+		}
 
 		inline const char* getStringFromMemory(void* memory, igObject* directory)
 		{
