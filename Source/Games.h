@@ -27,7 +27,7 @@
 // Skylanders Trap Team
 #define SKYTT_01_00_00     GameCode(2014, 10,  2,  1,  0,  0)
 #define SKYTT_01_01_00     GameCode(2014, 10,  2,  1,  1,  0)
-#define SKYTT_BEGIN        SKYTT_01_00_01
+#define SKYTT_BEGIN        SKYTT_01_00_00
 #define SKYTT_END          SKYTT_01_01_00
 
 // Skylanders SuperChargers
