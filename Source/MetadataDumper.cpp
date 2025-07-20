@@ -137,6 +137,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	static const Core::igMetaObject* bitFieldMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igBitFieldMetaField");
 	static const Core::igMetaObject* enumMetaObject         = Core::igArkCore_getObjectMeta(ArkCore, "igEnumMetaField");
 	static const Core::igMetaObject* staticMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStaticMetaField");
+	static const Core::igMetaObject* stringMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStringMetaField");
 	static const Core::igMetaObject* propertyMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igPropertyFieldMetaField");
 	static const Core::igMetaObject* ucharMetaObject        = Core::igArkCore_getObjectMeta(ArkCore, "igUnsignedCharMetaField");
 	static const Core::igMetaObject* structMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStructMetaField");
@@ -308,12 +309,22 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 		WriteFormattedText(writer, " num=\"%d\"", *(int*)(((asize_t)metafield) + numField->_offset))
 	}
 
-	void* data = nullptr;
+	const void* data = nullptr;
 	if((aint32_t)metafield->_default._size < 0) data = &metafield->_default._buffer;
 	else data = metafield->_default._buffer;
 
 	if (data != nullptr)
 	{
+		const char* wiiWorkaround = 0;
+#if TARGET_WII // Work around static string optimisation
+		if (metafield->getMeta()->isOfType(stringMetaObject))
+		{
+			wiiWorkaround = *reinterpret_cast<const char* const*>(data);
+			wiiWorkaround = reinterpret_cast<const char*>(reinterpret_cast<asize_t>(wiiWorkaround) | 0x80000000);
+			data = &wiiWorkaround;
+		}
+#endif // TARGET_WII
+
 		WriteFormattedText(writer, " default=\"%s\"", metafield->getStringFromMemory(data, 0));
 	}
 

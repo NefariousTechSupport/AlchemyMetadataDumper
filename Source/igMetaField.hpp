@@ -74,13 +74,13 @@ namespace Core
 			return reinterpret_cast<const char*>(name);
 		}
 
-		inline const char* getStringFromMemory(void* memory, igObject* directory)
+		inline const char* getStringFromMemory(const void* memory, igObject* directory)
 		{
 			const char* string;
 
 #if TARGET_PPC
 			// PowerPC abi moment
-			((const char*(*)(const char**, igMetaField*, void*, igObject*))GetVirtualFunc(_vTable, kVTIndex_getStringFromMemory))(&string, this, memory, directory);
+			((const char*(*)(const char**, igMetaField*, const void*, igObject*))GetVirtualFunc(_vTable, kVTIndex_getStringFromMemory))(&string, this, memory, directory);
 #else
 #error "Platform not supported"
 #endif // TARGET_PPC
