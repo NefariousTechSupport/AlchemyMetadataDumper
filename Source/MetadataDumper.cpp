@@ -531,6 +531,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 
 			WriteFormattedTextIndented(writer, 2, "<objectlist elementtype=\"%s\"/>\n", elementType->getName());
 		}
+#if TARGET_GAME > SKYSA_END // Temporary - idk how hashtables work in ssa
 		else if (meta->isOfType(hashTableMetaObject) && meta != hashTableMetaObject)
 		{
 			// Hashtables are a lil funky and have invalid keys/values, this
@@ -550,6 +551,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 										keysField->_memType->getStringFromMemory(invalidKey, 0)
 										);
 		}
+#endif // TARGET_GAME > SKYSA_END
 	}
 
 	if (meta->_metaFields._count - fieldStart > 0)
