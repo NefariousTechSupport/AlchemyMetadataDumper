@@ -280,7 +280,12 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 		aint32_t memTypeAlign = vectorMetaField->_memTypeAlignment;
 		if (memTypeAlign > 0)
 		{
-			Core::igObject* templateParam = metafield->getTemplateParameter(0);
+			Core::igObject* templateParam;
+#if TARGET_GAME > SKYSA_END // Vector metafield lacks getTemplateParameter method
+			templateParam = metafield->getTemplateParameter(0);		
+#else
+			templateParam = vectorMetaField->_elementType ? static_cast<Core::igObject*>(vectorMetaField->_elementType) : static_cast<Core::igObject*>(vectorMetaField->_memType);
+#endif // TARGET_GAME > SKYSA_END
 			auint32_t memTypeSize;
 			if (templateParam->getMeta()->isOfType(metaFieldMetaObject))
 			{
@@ -318,20 +323,33 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 		WriteFormattedText(writer, " default=\"%s\"", FIX_STRING(metafield->getStringFromMemory(data, 0)));
 	}
 
+	auint32_t templateParamCount;
+#if TARGET_GAME > SKYSA_END
+	templateParamCount = metafield->getTemplateParameterCount();
+#else
+	templateParamCount = fieldType->isOfType(vectorMetaObject) ? 1 : 0;
+#endif // TARGET_GAME > SKYSA_END
+
 	hasChildNodes = hasChildNodes
-	                || metafield->getTemplateParameterCount() > 0;
+	                || templateParamCount > 0;
 
 	if (hasChildNodes)
 	{
 		writer.WriteText(2, ">\n");
 
-		if (metafield->getTemplateParameterCount() > 0)
+		if (templateParamCount > 0)
 		{
 			WriteIndentedText(writer, indent+1, 15, "<templateargs>\n");
 
-			for (int i = 0; i < metafield->getTemplateParameterCount(); i++)
+			for (int i = 0; i < templateParamCount; i++)
 			{
-				Core::igObject* param = metafield->getTemplateParameter(i);
+				Core::igObject* param;
+#if TARGET_GAME > SKYSA_END
+				param = metafield->getTemplateParameter(i);
+#else // TARGET_GAME > SKYSA_END
+				Core::igVectorMetaField* vectorMetaField = reinterpret_cast<Core::igVectorMetaField*>(metafield);
+				param = vectorMetaField->_elementType ? static_cast<Core::igObject*>(vectorMetaField->_elementType) : static_cast<Core::igObject*>(vectorMetaField->_memType);
+#endif // TARGET_GAME > SKYSA_END
 				if (param == nullptr)
 				{
 					WriteIndentedText(writer, indent+2, 8, "<null/>\n");

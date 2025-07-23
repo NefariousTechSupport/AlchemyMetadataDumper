@@ -93,8 +93,10 @@ namespace Core
 		DefineVirtualFunc_0(auint32_t, computeRequiredAlignment);
 		DefineVirtualFunc_1(auint32_t, computePlatformAlignment, aint32_t, platform);
 		DeclareVirtualFunc(getStringFromMemory);
+#if TARGET_GAME > SKYSA_END // template parameter was added later
 		DefineVirtualFunc_0_c(int, getTemplateParameterCount);
 		DefineVirtualFunc_1(igObject*, getTemplateParameter, int, i);
+#endif // TARGET_GAME > SKYSA_END
 	};
 
 	class igRefMetaField : public igMetaField

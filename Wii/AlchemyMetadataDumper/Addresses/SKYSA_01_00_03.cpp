@@ -53,8 +53,6 @@ const avtindex_t Core::igMetaField::kVTIndex_computePlatformSize         = 0x17;
 const avtindex_t Core::igMetaField::kVTIndex_computeRequiredAlignment    = 0x18; // Likely
 const avtindex_t Core::igMetaField::kVTIndex_computePlatformAlignment    = 0x1F; // Unknown
 const avtindex_t Core::igMetaField::kVTIndex_getStringFromMemory         = 0x38; // Confirmed
-const avtindex_t Core::igMetaField::kVTIndex_getTemplateParameterCount   = 0x43; // Unlikely, more likely that it's not a virtual method
-const avtindex_t Core::igMetaField::kVTIndex_getTemplateParameter        = 0x44; // Unlikely, more likely that it's not a virtual method
 
 
 // igHashTable
