@@ -315,17 +315,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	if (data != nullptr)
 	{
-		const char* wiiWorkaround = 0;
-#if TARGET_WII // Work around static string optimisation
-		if (metafield->getMeta()->isOfType(stringMetaObject))
-		{
-			wiiWorkaround = *reinterpret_cast<const char* const*>(data);
-			wiiWorkaround = reinterpret_cast<const char*>(reinterpret_cast<asize_t>(wiiWorkaround) | 0x80000000);
-			data = &wiiWorkaround;
-		}
-#endif // TARGET_WII
-
-		WriteFormattedText(writer, " default=\"%s\"", metafield->getStringFromMemory(data, 0));
+		WriteFormattedText(writer, " default=\"%s\"", FIX_STRING(metafield->getStringFromMemory(data, 0)));
 	}
 
 	hasChildNodes = hasChildNodes
