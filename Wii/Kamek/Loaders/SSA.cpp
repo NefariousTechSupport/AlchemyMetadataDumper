@@ -6,7 +6,9 @@ int loadIntoSSA();
 #define ALCHEMY_KAMEK_POOL 1
 
 //kmCondWritePointer(0x804CF8D0, 0x00000000, loadIntoSSA); // EU rev3, adds to the end of the initialisers array
-kmBranchDefAsm(0x800D69E8, NULL)
+kmWrite32(0x8000C3B4, 0x3D000009); // EU rev3, patches Core::igAlchemyInitialization::_bootstrapPoolSize to be larger
+//kmWrite32(0x8000C3D4, 0x38804000); // EU rev3, patches Core::igAlchemyInitialization::_stringPoolSize to be larger
+kmBranchDefAsm(0x804D2304, NULL) // EU rev3, end of the arkRegisterAsNeccessary method
 {
 	nofralloc
 	//save registers
