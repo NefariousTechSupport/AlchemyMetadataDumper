@@ -3,18 +3,21 @@
 
 #include "alchemystdint.h"
 
+#define PTR(writer) writer->
+#define REF(writer) writer.
+
 // extra level of indirection to so the line number is used,
 // otherwise __LINE__ would be tokenized
 #define WriteFormattedTextConcat_(a, b) a ## b
 #define WriteFormattedTextConcat(a, b) WriteFormattedTextConcat_(a, b)
 #define WriteFormattedText(writer, fmt, ...) \
 	len = __stubs::sprintf(buf, fmt, __VA_ARGS__); \
-	writer.WriteText(len, buf);
+	writer WriteText(len, buf);
 
 #define WriteIndentation(writer, indentation) \
 	for (int indenterI = 0; indenterI < (indentation); indenterI++) \
 	{ \
-		writer.WriteText(1, "\t"); \
+		writer WriteText(1, "\t"); \
 	}
 #define WriteFormattedTextIndented(writer, indentation, fmt, ...) \
 	WriteIndentation(writer, indentation) \
@@ -22,7 +25,7 @@
 
 #define WriteIndentedText(writer, indentation, len, text) \
 	WriteIndentation(writer, indentation) \
-	writer.WriteText((len), (text));
+	writer WriteText((len), (text));
 
 class FileWriter
 {

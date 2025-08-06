@@ -95,7 +95,7 @@ void DumpMetaFieldList()
 	for (int t = 0; t < ArkCoreMetaFieldList->_count; t++)
 	{
 		Core::igMetaField* field = ArkCoreMetaFieldList->get(t);
-		WriteFormattedTextIndented(writer, 1, "<metafield name=\"%s\">\n", field->getMeta()->getName());
+		WriteFormattedTextIndented(REF(writer), 1, "<metafield name=\"%s\">\n", field->getMeta()->getName());
 
 		for (int i = 0; i < platformMetaEnum->_names->_count; i++)
 		{
@@ -108,10 +108,10 @@ void DumpMetaFieldList()
 				continue;
 			}
 
-			WriteFormattedTextIndented(writer, 2, "<platforminfo platform=\"%s\" align=\"0x%02X\" size=\"0x%02X\"/>\n", platformName, field->computePlatformAlignment(i), field->computePlatformSize(i));
+			WriteFormattedTextIndented(REF(writer), 2, "<platforminfo platform=\"%s\" align=\"0x%02X\" size=\"0x%02X\"/>\n", platformName, field->computePlatformAlignment(i), field->computePlatformSize(i));
 		}
 
-		WriteIndentedText(writer, 1, 13, "</metafield>\n");
+		WriteIndentedText(REF(writer), 1, 13, "</metafield>\n");
 	}
 
 	writer.WriteText(14, "</metafields>\n");
@@ -148,7 +148,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	bool hasChildNodes = false;
 
 
-	WriteFormattedTextIndented(writer,
+	WriteFormattedTextIndented(REF(writer),
 	                           indent,
 	                           "<metafield type=\"%s\""
 	                           " offset=\"0x%04X\"",
@@ -158,28 +158,28 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	if (root && metafield->getName())
 	{
-		WriteFormattedText(writer, " name=\"%s\"", metafield->getName());
+		WriteFormattedText(REF(writer), " name=\"%s\"", metafield->getName());
 	}
 
 	if (metafield->_properties._copyMethod != 3)
 	{
-		WriteFormattedText(writer, " copyMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._copyMethod]);
+		WriteFormattedText(REF(writer), " copyMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._copyMethod]);
 	}
 	if (metafield->_properties._resetMethod != 3)
 	{
-		WriteFormattedText(writer, " resetMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._resetMethod]);
+		WriteFormattedText(REF(writer), " resetMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._resetMethod]);
 	}
 	if (metafield->_properties._isAlikeMethod != 3)
 	{
-		WriteFormattedText(writer, " isAlikeMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._isAlikeMethod]);
+		WriteFormattedText(REF(writer), " isAlikeMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._isAlikeMethod]);
 	}
 	if (metafield->_properties._itemsCopyMethod != 3)
 	{
-		WriteFormattedText(writer, " itemsCopyMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._itemsCopyMethod]);
+		WriteFormattedText(REF(writer), " itemsCopyMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._itemsCopyMethod]);
 	}
 	if (metafield->_properties._keysCopyMethod != 3)
 	{
-		WriteFormattedText(writer, " keysCopyMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._keysCopyMethod]);
+		WriteFormattedText(REF(writer), " keysCopyMethod=\"%s\"", Core::fieldProperties::sPropertyTypeStrings[metafield->_properties._keysCopyMethod]);
 	}
 	if (!metafield->_properties._persistent)
 	{
@@ -200,7 +200,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (!metafield->_properties._implicitAlignment)
 	{
 		writer.WriteText(26, " implicitAlignment=\"false\"");
-		WriteFormattedText(writer, " requiredAlignment=\"%d\"", metafield->computeRequiredAlignment());
+		WriteFormattedText(REF(writer), " requiredAlignment=\"%d\"", metafield->computeRequiredAlignment());
 	}
 
 
@@ -209,7 +209,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	if (fieldType->isOfType(refMetaObject))
 	{
-		WriteFormattedText(writer, " construct=\"%s\" destruct=\"%s\" reconstruct=\"%s\" refCounted=\"%s\"",
+		WriteFormattedText(REF(writer), " construct=\"%s\" destruct=\"%s\" reconstruct=\"%s\" refCounted=\"%s\"",
 			((Core::igRefMetaField*)metafield)->_construct   ? "true" : "false",
 			((Core::igRefMetaField*)metafield)->_destruct    ? "true" : "false",
 			((Core::igRefMetaField*)metafield)->_reconstruct ? "true" : "false",
@@ -219,14 +219,14 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	if (fieldType->isOfType(objectRefMetaObject))
 	{
-		WriteFormattedText(writer, " metaobject=\"%s\"", 
+		WriteFormattedText(REF(writer), " metaobject=\"%s\"", 
 			((Core::igObjectRefMetaField*)metafield)->_metaObject ? ((Core::igObjectRefMetaField*)metafield)->_metaObject->getName() : "igObject"
 			);
 	}
 
 	if (fieldType->isOfType(handleMetaObject))
 	{
-		WriteFormattedText(writer, " metaobject=\"%s\"", 
+		WriteFormattedText(REF(writer), " metaobject=\"%s\"", 
 			((Core::igHandleMetaField*)metafield)->_metaObject ? ((Core::igHandleMetaField*)metafield)->_metaObject->getName() : "igObject"
 			);
 	}
@@ -239,7 +239,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	if (fieldType->isOfType(bitFieldMetaObject))
 	{
-		WriteFormattedText(writer,
+		WriteFormattedText(REF(writer),
 		                   " shift=\"0x%02X\" bits=\"0x%02X\" storageField=\"%s\" assignmentField=\"f0\"",
 		                   ((Core::igBitFieldMetaField*)metafield)->_shift,
 		                   ((Core::igBitFieldMetaField*)metafield)->_bits,
@@ -251,7 +251,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (fieldType->isOfType(enumMetaObject))
 	{
 		Core::igMetaEnum*(*getMetaEnumFunc)() = ((Core::igEnumMetaField*)metafield)->_getMetaEnumFunction;
-		WriteFormattedText(writer,
+		WriteFormattedText(REF(writer),
 		                   " metaenum=\"%s\"",
 		                   getMetaEnumFunc ? getMetaEnumFunc()->getName() : "(null)"
 		                   );
@@ -271,7 +271,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	if (fieldType->isOfType(structMetaObject))
 	{
-		WriteFormattedText(writer, " typeSize=\"0x%02X\" align=\"0x%02X\"", ((Core::igStructMetaField*)metafield)->_typeSize, metafield->computeRequiredAlignment());
+		WriteFormattedText(REF(writer), " typeSize=\"0x%02X\" align=\"0x%02X\"", ((Core::igStructMetaField*)metafield)->_typeSize, metafield->computeRequiredAlignment());
 	}
 
 	if (fieldType->isOfType(vectorMetaObject))
@@ -296,12 +296,12 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 				// it's an igObjectRefMetaField
 				memTypeSize = sizeof(Core::igObject*);
 			}
-			WriteFormattedText(writer, " memTypeAlignmentMultiple=\"0x%02X\"", memTypeAlign / memTypeSize);
+			WriteFormattedText(REF(writer), " memTypeAlignmentMultiple=\"0x%02X\"", memTypeAlign / memTypeSize);
 		}
 
 		if (vectorMetaField->_initialCapacity > 0)
 		{
-			WriteFormattedText(writer, " initialCapacity=\"%d\"", vectorMetaField->_initialCapacity);
+			WriteFormattedText(REF(writer), " initialCapacity=\"%d\"", vectorMetaField->_initialCapacity);
 		}
 	}
 
@@ -311,7 +311,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if (streq(numField->getName(), "_num"))
 	{
 		DEBUGPRINTF("Located num metafield at %08X, num field at %02X\n", numField, numField->_offset);
-		WriteFormattedText(writer, " num=\"%d\"", *(int*)(((asize_t)metafield) + numField->_offset))
+		WriteFormattedText(REF(writer), " num=\"%d\"", *(int*)(((asize_t)metafield) + numField->_offset))
 	}
 
 	const void* data = nullptr;
@@ -341,7 +341,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 		if (templateParamCount > 0)
 		{
-			WriteIndentedText(writer, indent+1, 15, "<templateargs>\n");
+			WriteIndentedText(REF(writer), indent+1, 15, "<templateargs>\n");
 
 			for (int i = 0; i < templateParamCount; i++)
 			{
@@ -354,7 +354,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 #endif // TARGET_GAME > SKYSA_END
 				if (param == nullptr)
 				{
-					WriteIndentedText(writer, indent+2, 8, "<null/>\n");
+					WriteIndentedText(REF(writer), indent+2, 8, "<null/>\n");
 					continue;
 				}
 
@@ -376,7 +376,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 				}
 			}
 
-			WriteIndentedText(writer, indent+1, 16, "</templateargs>\n");
+			WriteIndentedText(REF(writer), indent+1, 16, "</templateargs>\n");
 		}
 
 		if (fieldType->isOfType(memRefHandleMetaObject))
@@ -422,7 +422,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 			DumpMetaField(writer, indent + 1, ((Core::igPropertyFieldMetaField*)metafield)->_innerMetaField);
 		}
 
-		WriteIndentedText(writer, indent, 13, "</metafield>\n");
+		WriteIndentedText(REF(writer), indent, 13, "</metafield>\n");
 	}
 	else
 	{
@@ -471,10 +471,10 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 
 	DEBUGPRINTF("dumping metaobject %s\n", meta->getName());
 
-	WriteFormattedText(writer, "\t<metaobject type=\"%s\" refname=\"%s\"", meta->getMeta()->getName(), meta->getName());
+	WriteFormattedText(REF(writer), "\t<metaobject type=\"%s\" refname=\"%s\"", meta->getMeta()->getName(), meta->getName());
 	if (meta->_parent)
 	{
-		WriteFormattedText(writer, " basetype=\"%s\"", meta->_parent->getName());
+		WriteFormattedText(REF(writer), " basetype=\"%s\"", meta->_parent->getName());
 	}
 	writer.WriteText(2, ">\n");
 
@@ -531,7 +531,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 				elementType = ((Core::igMetaObject*(*)(Core::igObjectList*))GetVirtualFunc(meta->_vTablePointer, Core::igObjectList::kVTIndex_getElementType))(0);
 			}
 
-			WriteFormattedTextIndented(writer, 2, "<objectlist elementtype=\"%s\"/>\n", elementType->getName());
+			WriteFormattedTextIndented(REF(writer), 2, "<objectlist elementtype=\"%s\"/>\n", elementType->getName());
 		}
 #if TARGET_GAME > SKYSA_END // Temporary - idk how hashtables work in ssa
 		else if (meta->isOfType(hashTableMetaObject) && meta != hashTableMetaObject)
@@ -546,7 +546,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			void* invalidKey   = ((void*(*)(Core::igHashTableVirtuals*))GetVirtualFunc(meta->_vTablePointer, Core::igHashTableVirtuals::kVTIndex_keyTraitsInvalid))(0);
 			void* invalidValue = ((void*(*)(Core::igHashTableVirtuals*))GetVirtualFunc(meta->_vTablePointer, Core::igHashTableVirtuals::kVTIndex_valueTraitsInvalid))(0);
 
-			WriteFormattedTextIndented(writer,
+			WriteFormattedTextIndented(REF(writer),
 										2,
 										"<hashtable invalidvalue=\"%s\" invalidkey=\"%s\"/>\n",
 										valuesField->_memType->getStringFromMemory(invalidValue, 0),
@@ -583,7 +583,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			writer.WriteText(17, "\t\t<dotnetfields>\n");
 			for (aint32_t i = 0; i < dotnetMeta->_exposedFieldCount; i++)
 			{
-				WriteFormattedTextIndented(writer,
+				WriteFormattedTextIndented(REF(writer),
 										3,
 										"<field cppName=\"%s\" dnName=\"%s\"/>\n",
 										cppFieldNames[i],
@@ -603,7 +603,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			Core::igStaticMetaField* interfaceMetaField = static_cast<Core::igStaticMetaField*>(meta->_metaFields.get(i));
 			tfbScript::InterfaceResolver* interface = *static_cast<tfbScript::InterfaceResolver**>(interfaceMetaField->_staticPointer);
 
-			WriteFormattedText(writer, "\t\t<tfbBindings name=\"%s\">\n", interface->_name);
+			WriteFormattedText(REF(writer), "\t\t<tfbBindings name=\"%s\">\n", interface->_name);
 
 			// I have zero clue why they have two lists when only one is used
 			Core::igTObjectList<tfbScript::tfbScriptObject>* list = interface->_lists[1] ? interface->_lists[1] : interface->_lists[0];
@@ -611,7 +611,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			{
 				tfbScript::tfbScriptObject* binding = list->get(b);
 
-				WriteFormattedTextIndented(writer, 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), binding->_name);
+				WriteFormattedTextIndented(REF(writer), 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), binding->_name);
 			}
 
 			writer.WriteText(17, "\t\t</tfbBindings>\n");
