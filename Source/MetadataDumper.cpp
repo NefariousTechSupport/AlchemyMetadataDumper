@@ -44,17 +44,54 @@ bool streq(const char* a, const char* b)
 
 static Core::igMetaEnum* platformMetaEnum = 0;
 
-void DumpMetaEnums()
+struct
+{
+	Core::igMetaObject* dynamicMetaEnumType;
+	FileWriter* writer;
+} metaenumContext;
+
+void SetupMetaenumDumping(FileWriter& writer)
+{
+	metaenumContext.dynamicMetaEnumType = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaEnum");
+
+	metaenumContext.writer = &writer;
+
+	metaenumContext.writer->WriteText(12, "<metaenums>\n");
+}
+
+void DumpMetaEnum(Core::igMetaEnum* metaEnum)
 {
 	char buf[512];
 	int len;
 
-	Core::igMetaObject* dynamicMetaEnumType = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaEnum");
+	// Flag that we've read this one already so that it doesn't get dumped multiple times
+	auint8_t& metaenumFlags = *reinterpret_cast<auint8_t*>(&metaEnum->_flags);
+	if (metaenumFlags & 0x80)
+	{
+		return;
+	}
+	metaenumFlags |= 0x80;
 
-	FileWriter writer = FileWriter("metaenums.xml");
+	if (!platformMetaEnum && streq(metaEnum->getName(), "IG_CORE_PLATFORM"))
+	{
+		platformMetaEnum = metaEnum;
+	}
+	
+	WriteFormattedText(PTR(metaenumContext.writer), "\t<metaenum refname=\"%s\">\n", metaEnum->getName());
+	for(int j = 0; j < metaEnum->_names->_count; j++)
+	{
+		WriteFormattedText(PTR(metaenumContext.writer), "\t\t<value name=\"%s\" value=\"%d\"/>\n", FIX_STRING(metaEnum->_names->get(j)), metaEnum->_values->get(j));
+	}
+	WriteFormattedText(PTR(metaenumContext.writer), "\t</metaenum>\n", metaEnum->getName());
+}
 
-	writer.WriteText(12, "<metaenums>\n");
+void StopMetaenumDumping()
+{
+	metaenumContext.writer->WriteText(12, "</metaenums>");
+}
 
+void DumpMetaEnums(FileWriter& writer)
+{
 	Core::igMemory<Core::igMetaEnum*>& metaEnums = ArkCore->_metaEnumHashTable->_values;
 	for(int i = 0; i < metaEnums._size / sizeof(Core::igMetaEnum*); i++)
 	{
@@ -64,24 +101,13 @@ void DumpMetaEnums()
 			continue;
 		}
 
-		if(dynamicMetaEnumType && metaEnum->getMeta()->isOfType(dynamicMetaEnumType))
+		if(metaenumContext.dynamicMetaEnumType && metaEnum->getMeta()->isOfType(metaenumContext.dynamicMetaEnumType))
 		{
 			continue;
 		}
 
-		if (!platformMetaEnum && streq(metaEnum->getName(), "IG_CORE_PLATFORM"))
-		{
-			platformMetaEnum = metaEnum;
-		}
-		
-		WriteFormattedText(writer, "\t<metaenum refname=\"%s\">\n", metaEnum->getName());
-		for(int j = 0; j < metaEnum->_names->_count; j++)
-		{
-			WriteFormattedText(writer, "\t\t<value name=\"%s\" value=\"%d\"/>\n", metaEnum->_names->get(j), metaEnum->_values->get(j));
-		}
-		WriteFormattedText(writer, "\t</metaenum>\n", metaEnum->getName());
+		DumpMetaEnum(metaEnum);
 	}
-	writer.WriteText(12, "</metaenums>");
 }
 
 void DumpMetaFieldList()
@@ -255,6 +281,11 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 		                   " metaenum=\"%s\"",
 		                   getMetaEnumFunc ? getMetaEnumFunc()->getName() : "(null)"
 		                   );
+
+		if (getMetaEnumFunc)
+		{
+			DumpMetaEnum(getMetaEnumFunc());
+		}
 	}
 
 	if (fieldType->isOfType(staticMetaObject))
@@ -688,10 +719,19 @@ void MetadataDumperThread()
 	defaultMetaField._default._buffer = 0;
 	defaultMetaField._default._size = 0;
 
+	FileWriter writer = FileWriter("metaenums.xml");
+	SetupMetaenumDumping(writer);
+
 	// Order is essential
 	DumpMetaObjects();     // Generates some of the metaenums when we call _getMetaEnum
+
+#if TARGET_GAME > SKYSA_END // SSA lacks a global metaenum list
 	DumpMetaEnums();       // Grabs the platform enum
+#endif // TARGET_GAME > SKYSA_END
+
 	DumpMetaFieldList();
+
+	StopMetaenumDumping();
 
 	_igReportPrintf("all done!\n");
 }
