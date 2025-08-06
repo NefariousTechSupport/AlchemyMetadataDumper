@@ -320,7 +320,9 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	if (data != nullptr)
 	{
-		WriteFormattedText(writer, " default=\"%s\"", FIX_STRING(metafield->getStringFromMemory(data, 0)));
+		const char* defaultString = metafield->getStringFromMemory(data, 0);
+		WriteFormattedText(REF(writer), " default=\"%s\"", FIX_STRING(defaultString));
+		ReleaseString(defaultString);
 	}
 
 	auint32_t templateParamCount;

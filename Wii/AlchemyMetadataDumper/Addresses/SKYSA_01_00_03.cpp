@@ -70,6 +70,7 @@ DefineMethod(0x803571CC, int,                 __stubs::sprintf,              cha
 DefineMethod(0x800E398C, bool,                Core::igMetaObject_isOfType,   const Core::igMetaObject*, const Core::igMetaObject*);
 DefineMethod(0x800D8F9C, Core::igMetaObject*, Core::igArkCore_getObjectMeta, Core::igArkCore*, const char*);
 DefineMethod(0x80112DB4, int,                 _igReportPrintf,               const char*, ...);
+DefineMethod(0x80124054, void,                Core::igStringPoolItem::release, const char*);
 
 
 
