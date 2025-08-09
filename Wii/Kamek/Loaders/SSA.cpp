@@ -5,9 +5,25 @@ int loadIntoSSA();
 // This is the system pool
 #define ALCHEMY_KAMEK_POOL 1
 
-//kmCondWritePointer(0x804CF8D0, 0x00000000, loadIntoSSA); // EU rev3, adds to the end of the initialisers array
-kmWrite32(0x8000C3B4, 0x3D000009); // EU rev3, patches Core::igAlchemyInitialization::_bootstrapPoolSize to be larger
-//kmWrite32(0x8000C3D4, 0x38804000); // EU rev3, patches Core::igAlchemyInitialization::_stringPoolSize to be larger
+//=============================================================================
+// Grow pool sizes as neccessary
+//=============================================================================
+// bootstrap
+// Patches Core::igAlchemyInitialization::_bootstrapPoolSize to be 23kb larger
+// EU rev3
+kmCondWrite32(0x8000C3E4, 0x910D82A8, 0x60000000); // Writes nop to the instruction overriding the default
+kmCondWrite32(0x80666348, 0x00100000, 0x00090000); // Overwrites the default to something more manageable
+
+// string
+// Patches Core::igAlchemyInitialization::_stringPoolSize to be ~32kb instead of ~8kb.
+// EU rev3
+kmCondWrite32(0x8000C3F4, 0x908D82B0, 0x60000000); // Writes nop to the instruction overriding the default
+kmCondWrite32(0x80666350, 0x00200000, 0x00002000); // Overwrites the default to something more manageable
+
+
+
+
+
 kmBranchDefAsm(0x804D2304, NULL) // EU rev3, end of the arkRegisterAsNeccessary method
 {
 	nofralloc
