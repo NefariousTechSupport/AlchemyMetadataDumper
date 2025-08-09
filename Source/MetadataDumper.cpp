@@ -629,7 +629,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	for (int i = meta->_parent ? meta->_parent->_metaFields._count : 0; i < meta->_metaFields._count; i++)
 	{
 		if (meta->_metaFields.get(i)->getMeta()->isOfType(staticMetaFieldMetaObject)
-		 && streq(meta->_metaFields.get(i)->_fieldName, "_interface"))
+		 && streq(meta->_metaFields.get(i)->getName(), "_interface"))
 		{
 			Core::igStaticMetaField* interfaceMetaField = static_cast<Core::igStaticMetaField*>(meta->_metaFields.get(i));
 			tfbScript::InterfaceResolver* interface = *static_cast<tfbScript::InterfaceResolver**>(interfaceMetaField->_staticPointer);
@@ -726,7 +726,7 @@ void MetadataDumperThread()
 	DumpMetaObjects();     // Generates some of the metaenums when we call _getMetaEnum
 
 #if TARGET_GAME > SKYSA_END // SSA lacks a global metaenum list
-	DumpMetaEnums();       // Grabs the platform enum
+	DumpMetaEnums(writer); // Grabs the platform enum
 #endif // TARGET_GAME > SKYSA_END
 
 	DumpMetaFieldList();
