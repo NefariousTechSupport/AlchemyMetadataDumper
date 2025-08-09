@@ -3,6 +3,7 @@
 A "platform independent" dynamic library for dumping runtime reflection metadata from games made with the alchemy game engine
 
 Supported:
+- Skylanders Spyro's Adventure (Wii SSPP52 Rev3)
 - Skylanders Trap Team v1.1.0 (PS3)
 - Skylanders Superchargers v1.6.0 (PS3)
 - Skylanders Imaginators v1.1.0 (PS3)
@@ -11,7 +12,7 @@ Supported:
 ## Developer Notes:
 
 - Add platform specific code into platform specific folders
-- Use C++03 for PS3 compatibility
+- Use C++98 for Wii compatibility
 - Do not link against standard libraries, certain platforms have really tight memory constaints, and alchemy tends to allocate all its memory up front on consoles, leaving us with very little room to work with.
 	- This means that you cannot do heap allocation, `malloc` requires linking against libstdc, `operator new` requires linking against libstdc++, rely on local variables and try and be smart with how you use them 
 - Please put platform specific implementations behind conditional compilation, the guards are
