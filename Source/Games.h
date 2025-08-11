@@ -44,6 +44,8 @@
 #define SKYIM_BEGIN        SKYIM_01_00_00
 #define SKYIM_END          SKYIM_01_01_00
 
+// Helper macros
+#define IS_GAME(name)      (TARGET_GAME >= name##_BEGIN && TARGET_GAME <= name##_END)
 
 #ifndef TARGET_GAME
 #error No game was specified
