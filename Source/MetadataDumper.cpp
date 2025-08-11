@@ -125,7 +125,7 @@ void DumpMetaFieldList()
 
 		for (int i = 0; i < platformMetaEnum->_names->_count; i++)
 		{
-			const char* platformName = platformMetaEnum->_names->get(i);
+			const char* platformName = FIX_STRING(platformMetaEnum->_names->get(i));
 
 			if (streq(platformName, "IG_CORE_PLATFORM_DEFAULT")
 			 || streq(platformName, "IG_CORE_PLATFORM_DEPRECATED")
