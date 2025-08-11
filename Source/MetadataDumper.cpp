@@ -729,7 +729,9 @@ void MetadataDumperThread()
 	DumpMetaEnums(writer); // Grabs the platform enum
 #endif // TARGET_GAME > SKYSA_END
 
+#if TARGET_GAME > SKYSA_END // SSA lacks the computePlatformAlignment and computePlatformSize methods
 	DumpMetaFieldList();
+#endif // TARGET_GAME > SKYSA_END
 
 	StopMetaenumDumping();
 
