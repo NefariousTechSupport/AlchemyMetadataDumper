@@ -79,8 +79,8 @@ DefineMethod(0x80124054, void,                Core::igStringPoolItem::release, c
 //=============================================================================
 // Global variables
 //=============================================================================
-static const asize_t Core_ArkCore                     = 0x8066aa94;
-static const asize_t Core_MetaFieldList               = 0x0098517c;
+static const asize_t Core_ArkCore                     = 0x8066AA94;
+static const asize_t Core_MetaFieldList               = 0x8066AAA4;
 
 Core::igArkCore* __internalGetArkCore()
 {
