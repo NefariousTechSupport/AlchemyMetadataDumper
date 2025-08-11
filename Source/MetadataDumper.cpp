@@ -625,7 +625,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	}
 #endif // TARGET_GAME >= SKYIM_01_00_00
 
-#if TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00 // tfbScript bindings
+#if IS_GAME(SKYSA) || IS_GAME(SKYTT) // tfbScript bindings
 	for (int i = meta->_parent ? meta->_parent->_metaFields._count : 0; i < meta->_metaFields._count; i++)
 	{
 		if (meta->_metaFields.get(i)->getMeta()->isOfType(staticMetaFieldMetaObject)
@@ -634,7 +634,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			Core::igStaticMetaField* interfaceMetaField = static_cast<Core::igStaticMetaField*>(meta->_metaFields.get(i));
 			tfbScript::InterfaceResolver* interface = *static_cast<tfbScript::InterfaceResolver**>(interfaceMetaField->_staticPointer);
 
-			WriteFormattedText(REF(writer), "\t\t<tfbBindings name=\"%s\">\n", interface->_name);
+			WriteFormattedText(REF(writer), "\t\t<tfbBindings name=\"%s\">\n", FIX_STRING(interface->_name));
 
 			// I have zero clue why they have two lists when only one is used
 			Core::igTObjectList<tfbScript::tfbScriptObject>* list = interface->_lists[1] ? interface->_lists[1] : interface->_lists[0];
@@ -642,7 +642,7 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			{
 				tfbScript::tfbScriptObject* binding = list->get(b);
 
-				WriteFormattedTextIndented(REF(writer), 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), binding->_name);
+				WriteFormattedTextIndented(REF(writer), 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), FIX_STRING(binding->_name));
 			}
 
 			writer.WriteText(17, "\t\t</tfbBindings>\n");
