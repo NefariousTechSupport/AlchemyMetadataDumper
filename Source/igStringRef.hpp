@@ -5,7 +5,6 @@
     {                                                                           \
         if (reinterpret_cast<asize_t>(string) & 0x80000000)                     \
         {                                                                       \
-            _igReportPrintf("Freeing string %p", string);                       \
             ::Core::igStringPoolItem::release(string - 0x0C);                   \
         }                                                                       \
     } while(false)
