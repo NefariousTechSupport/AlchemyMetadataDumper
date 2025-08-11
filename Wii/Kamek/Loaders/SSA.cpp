@@ -18,7 +18,7 @@ kmCondWrite32(0x80666348, 0x00100000, 0x00090000); // Overwrites the default to 
 // Patches Core::igAlchemyInitialization::_stringPoolSize to be ~32kb instead of ~8kb.
 // EU rev3
 kmCondWrite32(0x8000C3F4, 0x908D82B0, 0x60000000); // Writes nop to the instruction overriding the default
-kmCondWrite32(0x80666350, 0x00200000, 0x00002000); // Overwrites the default to something more manageable
+kmCondWrite32(0x80666350, 0x00200000, 0x00008000); // Overwrites the default to something more manageable
 
 
 
