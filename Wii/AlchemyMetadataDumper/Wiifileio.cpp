@@ -8,7 +8,7 @@
 
 void FileWriter::platformOpenFile(const char* filepath)
 {
-	_handle = 1;
+	_handle = reinterpret_cast<aint32_t>(filepath);
 }
 
 void FileWriter::platformTruncateFile(const char* filepath)
@@ -23,7 +23,7 @@ void FileWriter::platformCloseHandle()
 
 aint32_t FileWriter::platformWriteFile(const char* data, aint32_t len)
 {
-	_igReportPrintf("%s", data);
+	_igReportPrintf("%d:%s", _handle, data);
 	return len;
 }
 
