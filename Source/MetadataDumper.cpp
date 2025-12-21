@@ -24,7 +24,7 @@
 #define DEBUGPRINTF(fmt, ...)
 #endif // DEBUG_LOGS
 
-static Core::igMetaField defaultMetaField = {};
+static Core::igMetaField defaultMetaField = Core::igMetaField();
 
 bool streq(const char* a, const char* b)
 {

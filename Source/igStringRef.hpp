@@ -1,5 +1,6 @@
 #pragma once
 
+#if TARGET_WII
 #define ReleaseString(string)                                                   \
     do                                                                          \
     {                                                                           \
@@ -23,3 +24,6 @@ namespace Core
 		operator const char*() { return _value; }
 	};
 }
+#else
+#define ReleaseString(string)
+#endif // TARGET_WII
