@@ -636,13 +636,16 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 
 			WriteFormattedText(REF(writer), "\t\t<tfbBindings name=\"%s\">\n", FIX_STRING(interface->_name));
 
-			// I have zero clue why they have two lists when only one is used
-			Core::igTObjectList<tfbScript::tfbScriptObject>* list = interface->_lists[1] ? interface->_lists[1] : interface->_lists[0];
-			for (int b = 0; list && b < list->_count; b++)
+			// I have zero clue why they have two lists
+			for (int l = 0; interface->_lists[l] && l < 2; l++)
 			{
-				tfbScript::tfbScriptObject* binding = list->get(b);
+				Core::igTObjectList<tfbScript::tfbScriptObject>* list = interface->_lists[l];
+				for (int b = 0; list && b < list->_count; b++)
+				{
+					tfbScript::tfbScriptObject* binding = list->get(b);
 
-				WriteFormattedTextIndented(REF(writer), 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), FIX_STRING(binding->_name));
+					WriteFormattedTextIndented(REF(writer), 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), FIX_STRING(binding->_name));
+				}
 			}
 
 			writer.WriteText(17, "\t\t</tfbBindings>\n");
