@@ -26,6 +26,7 @@ namespace Core
 	class igMetaEnum;
 	class igMetaField;
 	class igMetaObject;
+	class igObjectHandleManager;
 
 	template<typename T>
 	struct igTVector;
@@ -46,10 +47,12 @@ namespace Core
 // Do use these
 #define ArkCore __internalGetArkCore()
 #define ArkCoreMetaFieldList __internalGetMetaFieldList()
+#define igObjectHandleManagerInstance __internalGetObjectHandleManager()
 
 // Don't use these
 Core::igArkCore* __internalGetArkCore();
 Core::igTVector<Core::igMetaField*>* __internalGetMetaFieldList();
+Core::igObjectHandleManager* __internalGetObjectHandleManager();
 
 
 

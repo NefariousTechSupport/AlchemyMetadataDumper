@@ -4,7 +4,9 @@
 
 #include "igArkCore.hpp"
 #include "igObjectList.hpp"
+#include "igObjectHandleManager.hpp"
 #include "igHashTable.hpp"
+#include "igHandle.hpp"
 #include "igMetaEnum.hpp"
 #include "igMetaObject.hpp"
 #include "igMetaField.hpp"
@@ -28,6 +30,11 @@ static Core::igMetaField defaultMetaField = Core::igMetaField();
 
 bool streq(const char* a, const char* b)
 {
+	if (!a || !b)
+	{
+		return a == b;
+	}
+
 	while(*a)
 	{
 		if (*a != *b)
@@ -625,34 +632,6 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	}
 #endif // TARGET_GAME >= SKYIM_01_00_00
 
-#if IS_GAME(SKYSA) || IS_GAME(SKYTT) // tfbScript bindings
-	for (int i = meta->_parent ? meta->_parent->_metaFields._count : 0; i < meta->_metaFields._count; i++)
-	{
-		if (meta->_metaFields.get(i)->getMeta()->isOfType(staticMetaFieldMetaObject)
-		 && streq(meta->_metaFields.get(i)->getName(), "_interface"))
-		{
-			Core::igStaticMetaField* interfaceMetaField = static_cast<Core::igStaticMetaField*>(meta->_metaFields.get(i));
-			tfbScript::InterfaceResolver* interface = *static_cast<tfbScript::InterfaceResolver**>(interfaceMetaField->_staticPointer);
-
-			WriteFormattedText(REF(writer), "\t\t<tfbBindings name=\"%s\">\n", FIX_STRING(interface->_name));
-
-			// I have zero clue why they have two lists
-			for (int l = 0; interface->_lists[l] && l < 2; l++)
-			{
-				Core::igTObjectList<tfbScript::tfbScriptObject>* list = interface->_lists[l];
-				for (int b = 0; list && b < list->_count; b++)
-				{
-					tfbScript::tfbScriptObject* binding = list->get(b);
-
-					WriteFormattedTextIndented(REF(writer), 3, "<binding type=\"%s\" name=\"%s\"/>\n", binding->getMeta()->getName(), FIX_STRING(binding->_name));
-				}
-			}
-
-			writer.WriteText(17, "\t\t</tfbBindings>\n");
-		}
-	}
-#endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-
 	// Only check the direct parent, otherwise array metafields will cause trouble
 	if (meta->_parent == compoundFieldMetaObject)
 	{
@@ -699,6 +678,63 @@ void DumpMetaObjects()
 	writer.WriteText(14, "</metaobjects>");
 }
 
+#if IS_GAME(SKYSA) || IS_GAME(SKYTT) // tfbScript bindings
+void DumpTfbBindings()
+{
+	char buf[512];
+	int len;
+
+	Core::igMemory<Core::igHandle>* handles = &igObjectHandleManagerInstance->_handleTable->_values;
+	auint32_t handleCount = (handles->_size & 0x00FFFFFF) / sizeof(Core::igHandle*);
+
+	Core::igTDataList<const char*>* systemNamespaces = igObjectHandleManagerInstance->_systemNamespaces;
+
+	FileWriter writer = FileWriter("tfbbindings.xml");
+	writer.WriteText(14, "<tfbbindings>\n");
+
+	_igReportPrintf("handle num is %d\n", handleCount);
+	_igReportPrintf("handle hash item count is %d\n", igObjectHandleManagerInstance->_handleTable->_hashItemCount);
+	for (int i = 0; i < handleCount; i++)
+	{
+		Core::igHandle handle = handles->get(i);
+		if (!handle._data)
+		{
+			continue;
+		}
+
+		const char* nameSpace = handle._data->_namespace._name;
+		bool isSystemNamespace = false;
+		for (int s = 0; s < systemNamespaces->_count; s++)
+		{
+			if (streq(nameSpace, systemNamespaces->get(s)))
+			{
+				isSystemNamespace = true;
+				break;
+			}
+		}
+
+		bool excludedSystemNamespace = isSystemNamespace;
+		excludedSystemNamespace &= streq(nameSpace, "metaimages")
+		                        || streq(nameSpace, "vertexformat")
+		                        || streq(nameSpace, "vertexblender")
+		                        || streq(nameSpace, "indexformats");
+
+		const char* typeName = "(null)";
+		if (handle._data->_object)
+		{
+			typeName = handle._data->_object->getMeta()->getName();
+		}
+
+		if (!excludedSystemNamespace && isSystemNamespace)
+		{
+			WriteFormattedTextIndented(REF(writer), 1, "<binding type=\"%s\" name=\"%s.%s\"/>\n", typeName, FIX_STRING(handle._data->_namespace._name), FIX_STRING(handle._data->_name._name));
+		}
+	}
+
+	writer.WriteText(15, "</tfbbindings>\n");
+}
+#endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
+
 void MetadataDumperThread()
 {
 	_igReportPrintf("hai\n");
@@ -735,6 +771,10 @@ void MetadataDumperThread()
 #if TARGET_GAME > SKYSA_END // SSA lacks the computePlatformAlignment and computePlatformSize methods
 	DumpMetaFieldList();
 #endif // TARGET_GAME > SKYSA_END
+
+#if IS_GAME(SKYSA) || IS_GAME(SKYTT)
+	DumpTfbBindings();
+#endif // IS_GAME(SKYSA) || IS_GAME(SKYTT)
 
 	StopMetaenumDumping();
 

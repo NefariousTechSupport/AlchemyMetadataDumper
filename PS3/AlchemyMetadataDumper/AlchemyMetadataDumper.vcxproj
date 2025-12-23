@@ -141,8 +141,11 @@
     <ClInclude Include="../../Source/igVector.hpp" />
     <ClInclude Include="../../Source/MetadataDumper.hpp" />
     <ClInclude Include="..\..\Source\alchemystdint.h" />
+    <ClInclude Include="..\..\Source\igHandle.hpp" />
     <ClInclude Include="..\..\Source\igInfo.hpp" />
+    <ClInclude Include="..\..\Source\igName.hpp" />
     <ClInclude Include="..\..\Source\igNamedObject.hpp" />
+    <ClInclude Include="..\..\Source\igObjectHandleManager.hpp" />
     <ClInclude Include="..\..\Source\InterfaceResolver.hpp" />
     <ClInclude Include="..\..\Source\tfbScriptObject.hpp" />
     <ClInclude Include="..\..\Source\asleep.h" />
