@@ -83,6 +83,7 @@ DefineMethod(0x001E0B90, int,                 _igReportPrintf,               con
 //=============================================================================
 static const asize_t Core_ArkCore                     = 0x009850fc;
 static const asize_t Core_MetaFieldList               = 0x0098517c;
+static const asize_t Core_ObjectHandleManager         = 0x00992a18;
 
 Core::igArkCore* __internalGetArkCore()
 {
@@ -94,4 +95,8 @@ Core::igTVector<Core::igMetaField*>* __internalGetMetaFieldList()
 	return (*(Core::igTVector<Core::igMetaField*>**)Core_MetaFieldList);
 }
 
+Core::igObjectHandleManager* __internalGetObjectHandleManager()
+{
+	return (*(Core::igObjectHandleManager**)Core_ObjectHandleManager);
+}
 #endif // TARGET_GAME == SKYTT_01_01_00
