@@ -12,11 +12,11 @@ TOPDIR 		?= 	$(CURDIR)
 include $(DEVKITARM)/3ds_rules
 
 TARGET		:= 	MetadataDumper-$(TITLE_ID)
-PLGINFO		:= 	sources/Loaders/$(TITLE_ID)/package.plgInfo
+PLGINFO		:= 	Loaders/$(TITLE_ID)/package.plgInfo
 BUILD		:= 	build
-INCLUDES	:= 	sources
+INCLUDES	:= 	sources ../Source
 LIBDIRS		:= 	$(CTRULIB)
-SOURCES 	:= 	sources
+SOURCES 	:= 	sources ../Source Loaders/$(TITLE_ID)
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -27,7 +27,7 @@ CFLAGS		:=	-Os -mword-relocations \
 				-fomit-frame-pointer -ffunction-sections -fno-strict-aliasing \
 				$(ARCH)
 
-CFLAGS		+=	$(INCLUDE) -D__3DS__ 
+CFLAGS		+=	$(INCLUDE) @$(TOPDIR)/Loaders/$(TITLE_ID)/defines.txt -D__3DS__ 
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11
 

@@ -1,5 +1,10 @@
 #pragma once
 
+#if __cplusplus
+extern "C"
+{
+#endif // __cplusplus
+
 #include <3ds/types.h>
 #define  MAX_BUFFER (50)
 #define  MAX_ITEMS_COUNT (64)
@@ -43,3 +48,7 @@ Result  PLGLDR__SetPluginLoadParameters(PluginLoadParameters *parameters);
 Result  PLGLDR__DisplayMenu(PluginMenu *menu);
 Result  PLGLDR__DisplayMessage(const char *title, const char *body);
 Result  PLGLDR__DisplayErrMessage(const char *title, const char *body, u32 error);
+
+#if __cplusplus // Close the extern "C"
+}
+#endif // __cplusplus

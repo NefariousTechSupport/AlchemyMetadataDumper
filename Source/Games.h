@@ -21,6 +21,7 @@
 #define SKYSA_01_00_01     GameCode(2011, 10, 13,  1,  0,  1)
 #define SKYSA_01_00_02     GameCode(2011, 10, 13,  1,  0,  2)
 #define SKYSA_01_00_03     GameCode(2011, 10, 13,  1,  0,  3)
+#define SKYSA_3DS          SKYSA_01_00_01
 #define SKYSA_BEGIN        SKYSA_01_00_01
 #define SKYSA_END          SKYSA_01_00_03
 

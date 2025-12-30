@@ -4,8 +4,9 @@ The 3DS version of the metadata uses this [sample project](https://github.com/Na
 
 ## Prerequisites
 
-- devkitARM
+- `devkitARM`
 - `3gxtool`, I used the latest release from https://gitlab.com/thepixellizeross/3gxtool. Install this to the PATH somewhere
+- `libctrpf`, can be installed from here https://gitlab.com/thepixellizeross/ctrpluginframework (read the README)
 
 ## Building and Running
 
