@@ -74,25 +74,27 @@ namespace Core
 			return reinterpret_cast<const char*>(name);
 		}
 
+#if TARGET_PPC
+		DeclareVirtualFunc(getStringFromMemory);
 		inline const char* getStringFromMemory(const void* memory, igObject* directory)
 		{
 			const char* string;
 
-#if TARGET_PPC
 			// PowerPC abi moment
 			((const char*(*)(const char**, igMetaField*, const void*, igObject*))GetVirtualFunc(_vTable, kVTIndex_getStringFromMemory))(&string, this, memory, directory);
-#else
-#error "Platform not supported"
-#endif // TARGET_PPC
 
 			return string;
 		}
+#elif TARGET_ARM
+		DefineVirtualFunc_2(const char*, getStringFromMemory, const void*, memory, igObject*, directory);
+#else // TARGET_PPC + TARGET_ARM
+#error "Platform not supported"
+#endif // TARGET_PPC + TARGET_ARM
 		DefineVirtualFunc_0(igMetaField*, getGenericMetaField);
 		DefineVirtualFunc_0(auint32_t, computeSize);
 		DefineVirtualFunc_1(auint32_t, computePlatformSize, aint32_t, platform);
 		DefineVirtualFunc_0(auint32_t, computeRequiredAlignment);
 		DefineVirtualFunc_1(auint32_t, computePlatformAlignment, aint32_t, platform);
-		DeclareVirtualFunc(getStringFromMemory);
 #if TARGET_GAME > SKYSA_END // template parameter was added later
 		DefineVirtualFunc_0_c(int, getTemplateParameterCount);
 		DefineVirtualFunc_1(igObject*, getTemplateParameter, int, i);
