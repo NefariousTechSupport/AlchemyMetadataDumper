@@ -1,0 +1,22 @@
+Author: NefariousTechSupport
+
+Version: # Plugin version
+    Major: 1
+    Minor: 0
+    Revision: 0
+
+Compatibility:
+    Any
+
+MemorySize:
+    2MiB
+
+Targets:
+    000400000004C000
+
+Title: Sample Plugin
+
+Summary: Metadata Dumper for Skylanders Spyro's Adventure
+
+Description: |
+  Metadata Dumper for Skylanders Spryo's Adventure
