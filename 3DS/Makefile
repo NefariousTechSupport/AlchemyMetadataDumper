@@ -100,6 +100,7 @@ $(OUTPUT).3gx : $(OFILES)
 #---------------------------------------------------------------------------------
 %.3gx: %.elf
 	@echo creating $(notdir $@)
+	@cp $(OUTPUT).elf $(notdir $(OUTPUT)).elf
 	@3gxtool.exe -s $(OUTPUT).elf $(TOPDIR)/$(PLGINFO) $@
 
 
