@@ -4,5 +4,5 @@
 
 void asleep(auint64_t milliseconds)
 {
-    svcSleepThread(milliseconds * 1000);
+	svcSleepThread(milliseconds * 1000000ULL);
 }
