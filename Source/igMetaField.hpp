@@ -31,7 +31,7 @@ namespace Core
 	class igMetaField : public igObject
 	{
 	public:
-#if TARGET_GAME >= SKYTT_BEGIN
+#if TARGET_GAME >= SKYSA_WIIU_BEGIN
 		auint16_t _parentMetaObjectIndex;   //0x08
 		aint16_t _typeIndex;                //0x0A
 		aint16_t _internalIndex;            //0x0C
@@ -63,7 +63,7 @@ namespace Core
 		auint16_t _size;                    //0x18
 		igObjectList* _attributes;          //0x1C
 		igMemory<auint8_t> _default;        //0x20
-#endif // TARGET_GAME >= SKYTT_BEGIN
+#endif // TARGET_GAME >= SKYSA_WIIU_BEGIN
 
 		inline const char* getName()
 		{
@@ -78,12 +78,15 @@ namespace Core
 		{
 			const char* string;
 
-#if TARGET_PPC
+#if TARGET_PPC && (!TARGET_CAFE)
 			// PowerPC abi moment
 			((const char*(*)(const char**, igMetaField*, const void*, igObject*))GetVirtualFunc(_vTable, kVTIndex_getStringFromMemory))(&string, this, memory, directory);
+#elif TARGET_CAFE
+			// the GHS abi puts a pointer to the return value after 'this' https://zenith.nsmbu.net/wiki/Green_Hills_Software/Application_Binary_Interface#Stack_Returns
+			((void (*)(igMetaField*, const char**, const void*, igObject*))GetVirtualFunc(_vTable, kVTIndex_getStringFromMemory))(this, &string, memory, directory);
 #else
 #error "Platform not supported"
-#endif // TARGET_PPC
+#endif // TARGET_PPC && (!TARGET_CAFE)
 
 			return string;
 		}
@@ -93,10 +96,10 @@ namespace Core
 		DefineVirtualFunc_0(auint32_t, computeRequiredAlignment);
 		DefineVirtualFunc_1(auint32_t, computePlatformAlignment, aint32_t, platform);
 		DeclareVirtualFunc(getStringFromMemory);
-#if TARGET_GAME > SKYSA_END // template parameter was added later
+#if (TARGET_GAME > SKYSA_END) && (!TARGET_CAFE) && (!IS_GAME(SKYSA_WIIU))// template parameter was added later
 		DefineVirtualFunc_0_c(int, getTemplateParameterCount);
 		DefineVirtualFunc_1(igObject*, getTemplateParameter, int, i);
-#endif // TARGET_GAME > SKYSA_END
+#endif // (TARGET_GAME > SKYSA_END) && (!TARGET_CAFE) && (!IS_GAME(SKYSA_WIIU))
 	};
 
 	class igRefMetaField : public igMetaField

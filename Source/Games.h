@@ -24,6 +24,11 @@
 #define SKYSA_BEGIN        SKYSA_01_00_01
 #define SKYSA_END          SKYSA_01_00_03
 
+// Spyro's Adventure Wii U
+#define SKYSA_WIIU_01_00_00 GameCode(2013, 7, 12,  1,  0,  0)
+#define SKYSA_WIIU_BEGIN        SKYSA_WIIU_01_00_00
+#define SKYSA_WIIU_END          SKYSA_WIIU_01_00_00
+
 // Skylanders Trap Team
 #define SKYTT_01_00_00     GameCode(2014, 10,  2,  1,  0,  0)
 #define SKYTT_01_01_00     GameCode(2014, 10,  2,  1,  1,  0)

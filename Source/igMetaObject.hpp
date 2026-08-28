@@ -9,14 +9,14 @@ namespace Core
 	class igMetaField;
 
 	class igMetaObject
-#if TARGET_GAME >= SKYTT_BEGIN
+#if TARGET_GAME >= SKYSA_WIIU_BEGIN
 	: public igBaseMeta
 #else
 	: public igObject
-#endif // TARGET_GAME >= SKYTT_BEGIN
+#endif // TARGET_GAME >= SKYSA_WIIU_BEGIN
 	{
 	public:
-#if TARGET_GAME >= SKYTT_BEGIN
+#if TARGET_GAME >= SKYSA_WIIU_BEGIN
 		igTVector<igMetaField*> _metaFields;
 		aint32_t _instanceCount;
 		void** _vTablePointer;
@@ -29,13 +29,13 @@ namespace Core
 		auint16_t _requiredAlignment;
 		igTVector<void*> _metaFunctions;
 		igObjectList* _attributes;
-#if TARGET_GAME <= SKYTT_END
+#if (TARGET_GAME >= SKYTT_BEGIN) && (TARGET_GAME <= SKYTT_END)
 		aint16_t _id;
 		aint16_t _tfbID;
 #else
 		aint32_t _id;
-#endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
-#else // TARGET_GAME >= SKYTT_BEGIN
+#endif // (TARGET_GAME >= SKYTT_BEGIN) && (TARGET_GAME <= SKYTT_END)
+#else // TARGET_GAME >= SKYSA_WIIU_BEGIN
 		aint32_t _id;
 private:
 		const char* _name;
@@ -52,7 +52,7 @@ public:
 		auint16_t _requiredAlignment;
 		igTVector<void*> _metaFunctions;
 		igObjectList* _attributes;
-#endif // TARGET_GAME >= SKYTT_BEGIN
+#endif // TARGET_GAME >= SKYSA_WIIU_BEGIN
 
 		inline bool isOfType(const igMetaObject* other) const
 		{
