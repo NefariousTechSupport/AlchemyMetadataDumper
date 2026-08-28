@@ -7,19 +7,19 @@
 namespace Core
 {
 	class igMetaEnum
-#if TARGET_GAME >= SKYTT_BEGIN
+#if TARGET_GAME >= SKYSA_WIIU_BEGIN
 	: public igBaseMeta
-#else // TARGET_GAME >= SKYTT_BEGIN
+#else // TARGET_GAME >= SKYSA_WIIU_BEGIN
 	: public igObject
-#endif // TARGET_GAME >= SKYTT_BEGIN
+#endif // TARGET_GAME >= SKYSA_WIIU_BEGIN
 	{
 	public:
 		bool _flags;
-#if TARGET_GAME < SKYTT_BEGIN
+#if TARGET_GAME < SKYSA_WIIU_BEGIN
 	private:
 		const char* _name;
 	public:
-#endif // TARGET_GAME < SKYSA_END
+#endif // TARGET_GAME < SKYSA_WIIU_BEGIN
 		igTDataList<const char*>* _names;
 		igTDataList<aint32_t>* _values;
 		igObjectList* _attributes;

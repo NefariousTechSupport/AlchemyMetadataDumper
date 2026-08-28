@@ -4,6 +4,7 @@ A "platform independent" dynamic library for dumping runtime reflection metadata
 
 Supported:
 - Skylanders Spyro's Adventure (Wii SSPP52 Rev3)
+- Skylanders Spyro's Adventure (Wii U)
 - Skylanders Trap Team v1.1.0 (PS3)
 - Skylanders Superchargers v1.6.0 (PS3)
 - Skylanders Imaginators v1.1.0 (PS3)

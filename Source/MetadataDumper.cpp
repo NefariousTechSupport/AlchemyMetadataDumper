@@ -10,6 +10,7 @@
 #include "igMetaEnum.hpp"
 #include "igMetaObject.hpp"
 #include "igMetaField.hpp"
+#include "igStringHelper.hpp"
 
 #include "InterfaceResolver.hpp"
 #include "tfbScriptObject.hpp"
@@ -21,10 +22,11 @@
 #define DEBUG_LOGS 0
 
 #if DEBUG_LOGS
-#define DEBUGPRINTF(fmt, ...) _igReportPrintf(fmt, __VA_ARGS__)
+#define DEBUGPRINTF(fmt, ...) _igReportPrintf("[DEBUGPRINTF] " fmt, __VA_ARGS__)
 #else
 #define DEBUGPRINTF(fmt, ...)
 #endif // DEBUG_LOGS
+
 
 static Core::igMetaField defaultMetaField = Core::igMetaField();
 
@@ -161,20 +163,21 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 
 	const Core::igMetaObject* fieldType = metafield->getMeta();
 
-	static const Core::igMetaObject* metaFieldMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igMetaField");
-	static const Core::igMetaObject* memRefMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igMemoryRefMetaField");
-	static const Core::igMetaObject* memRefHandleMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "igMemoryRefHandleMetaField");
-	static const Core::igMetaObject* refMetaObject          = Core::igArkCore_getObjectMeta(ArkCore, "igRefMetaField");
-	static const Core::igMetaObject* objectRefMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igObjectRefMetaField");
-	static const Core::igMetaObject* handleMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igHandleMetaField");
-	static const Core::igMetaObject* bitFieldMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igBitFieldMetaField");
-	static const Core::igMetaObject* enumMetaObject         = Core::igArkCore_getObjectMeta(ArkCore, "igEnumMetaField");
-	static const Core::igMetaObject* staticMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStaticMetaField");
-	static const Core::igMetaObject* stringMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStringMetaField");
-	static const Core::igMetaObject* propertyMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igPropertyFieldMetaField");
-	static const Core::igMetaObject* ucharMetaObject        = Core::igArkCore_getObjectMeta(ArkCore, "igUnsignedCharMetaField");
-	static const Core::igMetaObject* structMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStructMetaField");
-	static const Core::igMetaObject* vectorMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igVectorMetaField");
+	// temporarily removing static as a workaround since static constructors don't work on CemuPatchCompiler, TODO find a way to make these static again
+	const Core::igMetaObject* metaFieldMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igMetaField");
+	const Core::igMetaObject* memRefMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igMemoryRefMetaField");
+	const Core::igMetaObject* memRefHandleMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "igMemoryRefHandleMetaField");
+	const Core::igMetaObject* refMetaObject          = Core::igArkCore_getObjectMeta(ArkCore, "igRefMetaField");
+	const Core::igMetaObject* objectRefMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igObjectRefMetaField");
+	const Core::igMetaObject* handleMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igHandleMetaField");
+	const Core::igMetaObject* bitFieldMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igBitFieldMetaField");
+	const Core::igMetaObject* enumMetaObject         = Core::igArkCore_getObjectMeta(ArkCore, "igEnumMetaField");
+	const Core::igMetaObject* staticMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStaticMetaField");
+	const Core::igMetaObject* stringMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStringMetaField");
+	const Core::igMetaObject* propertyMetaObject     = Core::igArkCore_getObjectMeta(ArkCore, "igPropertyFieldMetaField");
+	const Core::igMetaObject* ucharMetaObject        = Core::igArkCore_getObjectMeta(ArkCore, "igUnsignedCharMetaField");
+	const Core::igMetaObject* structMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igStructMetaField");
+	const Core::igMetaObject* vectorMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igVectorMetaField");
 
 	//_igReportPrintf("memref is null? %d \n", memRefMetaObject == nullptr ? 1 : 0);
 
@@ -319,11 +322,11 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 		if (memTypeAlign > 0)
 		{
 			Core::igObject* templateParam;
-#if TARGET_GAME > SKYSA_END // Vector metafield lacks getTemplateParameter method
+#if (TARGET_GAME > SKYSA_END) && (!TARGET_CAFE) && (!IS_GAME(SKYSA_WIIU)) // Vector metafield lacks getTemplateParameter method
 			templateParam = metafield->getTemplateParameter(0);		
 #else
 			templateParam = vectorMetaField->_elementType ? static_cast<Core::igObject*>(vectorMetaField->_elementType) : static_cast<Core::igObject*>(vectorMetaField->_memType);
-#endif // TARGET_GAME > SKYSA_END
+#endif // (TARGET_GAME > SKYSA_END) && (!TARGET_CAFE) && (!IS_GAME(SKYSA_WIIU))
 			auint32_t memTypeSize;
 			if (templateParam->getMeta()->isOfType(metaFieldMetaObject))
 			{
@@ -356,19 +359,29 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 	if((aint32_t)metafield->_default._size < 0) data = &metafield->_default._buffer;
 	else data = metafield->_default._buffer;
 
-	if (data != nullptr)
+	#if TARGET_CAFE
+	DEBUGPRINTF("Checking if we need the default! metafield: %s\n", metafield->getMeta()->getName());
+
+	if ((data != nullptr) &&
+		(data != (const void *)0x80000000) &&
+		root &&
+		(Core::igStringHelper::compare("igStaticMetaField", metafield->getMeta()->getName()) != 0)) // we don't dump a default value if it's a static field
+	#else
+	if ((data != nullptr))
+	#endif // TARGET_CAFE
 	{
+		DEBUGPRINTF("Getting default! data: %p size: %d\n", data, metafield->_default._size);
 		const char* defaultString = metafield->getStringFromMemory(data, 0);
 		WriteFormattedText(REF(writer), " default=\"%s\"", FIX_STRING(defaultString));
 		ReleaseString(defaultString);
 	}
 
 	auint32_t templateParamCount;
-#if TARGET_GAME > SKYSA_END
+#if (TARGET_GAME > SKYSA_END) && (!TARGET_CAFE) && (!IS_GAME(SKYSA_WIIU))
 	templateParamCount = metafield->getTemplateParameterCount();
 #else
 	templateParamCount = fieldType->isOfType(vectorMetaObject) ? 1 : 0;
-#endif // TARGET_GAME > SKYSA_END
+#endif // (TARGET_GAME > SKYSA_END) && (!TARGET_CAFE) && (!IS_GAME(SKYSA_WIIU))
 
 	hasChildNodes = hasChildNodes
 	                || templateParamCount > 0;
@@ -384,7 +397,7 @@ void DumpMetaField(FileWriter& writer, int indent, Core::igMetaField* metafield,
 			for (int i = 0; i < templateParamCount; i++)
 			{
 				Core::igObject* param;
-#if TARGET_GAME > SKYSA_END
+#if (TARGET_GAME > SKYSA_END) && (!TARGET_CAFE) && (!IS_GAME(SKYSA_WIIU))
 				param = metafield->getTemplateParameter(i);
 #else // TARGET_GAME > SKYSA_END
 				Core::igVectorMetaField* vectorMetaField = reinterpret_cast<Core::igVectorMetaField*>(metafield);
@@ -475,16 +488,17 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 	
 	DEBUGPRINTF("Dumping metaobject %p\n", meta);
 
-	static const Core::igMetaObject* dotnetObjectType           = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetMetaObject");
-	static const Core::igMetaObject* dynamicObjectType          = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaObject");
-	static const Core::igMetaObject* dataListMetaObject         = Core::igArkCore_getObjectMeta(ArkCore, "igDataList");
-	static const Core::igMetaObject* objectListMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igObjectList");
-	static const Core::igMetaObject* nrcObjectListMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igNonRefCountedObjectList");
-	static const Core::igMetaObject* hashTableMetaObject        = Core::igArkCore_getObjectMeta(ArkCore, "igHashTable");
-	static const Core::igMetaObject* compoundFieldMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igCompoundMetaField");
-	static const Core::igMetaObject* scriptGroupStackMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "ScriptGroupStack");
-	static const Core::igMetaObject* rhsValueStackMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "RHSValueStack");
-	static const Core::igMetaObject* staticMetaFieldMetaObject  = Core::igArkCore_getObjectMeta(ArkCore, "igStaticMetaField");
+	// temporarily removing static as a workaround since static constructors don't work on CemuPatchCompiler, TODO find a way to make these static again
+	const Core::igMetaObject* dotnetObjectType           = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetMetaObject");
+	const Core::igMetaObject* dynamicObjectType          = Core::igArkCore_getObjectMeta(ArkCore, "igDotNetDynamicMetaObject");
+	const Core::igMetaObject* dataListMetaObject         = Core::igArkCore_getObjectMeta(ArkCore, "igDataList");
+	const Core::igMetaObject* objectListMetaObject       = Core::igArkCore_getObjectMeta(ArkCore, "igObjectList");
+	const Core::igMetaObject* nrcObjectListMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igNonRefCountedObjectList");
+	const Core::igMetaObject* hashTableMetaObject        = Core::igArkCore_getObjectMeta(ArkCore, "igHashTable");
+	const Core::igMetaObject* compoundFieldMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "igCompoundMetaField");
+	const Core::igMetaObject* scriptGroupStackMetaObject = Core::igArkCore_getObjectMeta(ArkCore, "ScriptGroupStack");
+	const Core::igMetaObject* rhsValueStackMetaObject    = Core::igArkCore_getObjectMeta(ArkCore, "RHSValueStack");
+	const Core::igMetaObject* staticMetaFieldMetaObject  = Core::igArkCore_getObjectMeta(ArkCore, "igStaticMetaField");
 
 	// Lots of types are generated from VVL scripts, this filters them
 	// out. If you wanna get that type information you should parse the
@@ -561,17 +575,171 @@ void DumpMetaObject(FileWriter& writer, Core::igMetaObject* meta)
 			}
 			else
 			{
+				#if TARGET_CAFE
+				DEBUGPRINTF("TARGET_CAFE!!!! We found a igTObjectList!!!\n",0);
+				const char* metaName = meta->getName();
+				int len = Core::igStringHelper::length(metaName);
+
+				// hardcoded ones, the curse of not having getElementType on Wii U
+				if (Core::igStringHelper::compare("AnimationStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "AbstractAnimSequence");
+				}
+				else if (Core::igStringHelper::compare("igDirectory", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igDirEntry");
+				}
+				else if (Core::igStringHelper::compare("igNonRefCountedAttrList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igAttr");
+				}
+				else if (Core::igStringHelper::compare("ValueStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbScriptObject");
+				}
+				else if (Core::igStringHelper::compare("PlacementSetList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "PlacementList");
+				}
+				else if (Core::igStringHelper::compare("SplashList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "SplashData");
+				}
+				else if (Core::igStringHelper::compare("igNonRefCountedAttrStackManagerList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igAttrStackManager");
+				}
+				else if (Core::igStringHelper::compare("VectorStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbScriptObject");
+				}
+				else if (Core::igStringHelper::compare("ReferenceStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbScriptObject");
+				}
+				else if (Core::igStringHelper::compare("SoundList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "AbstractSoundSequence");
+				}
+				else if (Core::igStringHelper::compare("ModelSoundList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "AbstractSoundSequence");
+				}
+				else if (Core::igStringHelper::compare("PositionStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbScriptObject");
+				}
+				else if (Core::igStringHelper::compare("ScriptVariantList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "AbstractScriptVariant");
+				}
+				else if (Core::igStringHelper::compare("OpDefineMacroStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbScriptObject");
+				}
+				else if (Core::igStringHelper::compare("TagList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "AbstractScriptVariant");
+				}
+				else if (Core::igStringHelper::compare("tfbStreamMemoryConfigurationRefList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbStreamMemoryConfiguration");
+				}
+				else if (Core::igStringHelper::compare("SetStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbScriptObject");
+				}
+				else if (Core::igStringHelper::compare("igNonRefCountedMetaImageList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igMetaImage");
+				}
+				else if (Core::igStringHelper::compare("igIGBFile", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igDirEntry");
+				}
+				else if (Core::igStringHelper::compare("igNonRefCountedNodeList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igNode");
+				}
+				else if (Core::igStringHelper::compare("tfbRendererList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "tfbSceneRenderer");
+				}
+				else if (Core::igStringHelper::compare("igNonRefCountedMemoryPoolList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igMemoryPool");
+				}
+				else if (Core::igStringHelper::compare("igPoolHandleTable", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igMemoryPool");
+				}
+				else if (Core::igStringHelper::compare("igLightList", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "igLightAttr");
+				}
+				else if (Core::igStringHelper::compare("BehaviorStack", metaName) == 0)
+				{
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, "OpUserBehavior");
+				}
+
+
+				else if ((len <= 4) ||
+					(metaName[len - 4] == 'L') &&
+					(metaName[len - 3] == 'i') &&
+					(metaName[len - 2] == 's') &&
+					(metaName[len - 1] == 't'))
+				{
+					DEBUGPRINTF("The List check didn't fail!! about to copy it to the stack with copyn\n",0);
+					char strippedString[128]; // hopefully big enough for every case
+					Core::igStringHelper::copyn(metaName, strippedString, len - 3);
+					DEBUGPRINTF("We just ran copyn, the string it made: %s\n", strippedString);
+					elementType = Core::igArkCore_getObjectMeta(ArkCore, strippedString);
+
+					// if simply stripping "List" at the end gives us an unknown type then we try to add
+					// "tfb" as a prefix. If that doesn't work we cry and start hardcoding.
+					if (elementType == nullptr)
+					{
+						strippedString[0] = 't';
+						strippedString[1] = 'f';
+						strippedString[2] = 'b';
+						Core::igStringHelper::copyn(metaName, strippedString + 3, len - 3);
+						DEBUGPRINTF("We just ran copyn, the string it made: %s\n", strippedString);
+
+						elementType = Core::igArkCore_getObjectMeta(ArkCore, strippedString);
+						if (elementType == nullptr)
+						{
+							_igReportPrintf("[FAIL] igTObjectList type name is weird: '%s' (len: %d)\n", metaName, len);
+						}
+					}
+
+					DEBUGPRINTF("We just set the elementType\n",0);
+					DEBUGPRINTF("elementType: %p\n", elementType);
+					DEBUGPRINTF("elementType name: %s\n", elementType->getName());
+				}
+
+				else
+				{
+					_igReportPrintf("[FAIL] igTObjectList type name is weird: '%s' (len: %d)\n", metaName, len);
+				}
+
+
+				#else // TARGET_CAFE
+
 				// This calls getElementType, which returns the igMetaObject
 				// of the object this list contains
 				//
 				// the _data field of this igObjectList claims that the memory
 				// contains igObjects, rather than the actual element type.
 				elementType = ((Core::igMetaObject*(*)(Core::igObjectList*))GetVirtualFunc(meta->_vTablePointer, Core::igObjectList::kVTIndex_getElementType))(0);
+			
+				#endif // TARGET_CAFE
 			}
 
+			DEBUGPRINTF("We're about to write the elementType\n",0);
 			WriteFormattedTextIndented(REF(writer), 2, "<objectlist elementtype=\"%s\"/>\n", elementType->getName());
+			DEBUGPRINTF("We wrote the elementType\n",0);
 		}
-#if TARGET_GAME > SKYSA_END // Temporary - idk how hashtables work in ssa
+#if (TARGET_GAME > SKYSA_END) && (!IS_GAME(SKYSA_WIIU)) // Temporary - idk how hashtables work in ssa
 		else if (meta->isOfType(hashTableMetaObject) && meta != hashTableMetaObject)
 		{
 			// Hashtables are a lil funky and have invalid keys/values, this
@@ -678,7 +846,7 @@ void DumpMetaObjects()
 	writer.WriteText(14, "</metaobjects>");
 }
 
-#if IS_GAME(SKYSA) || IS_GAME(SKYTT) // tfbScript bindings
+#if IS_GAME(SKYSA) || IS_GAME(SKYTT) || IS_GAME(SKYSA_WIIU) // tfbScript bindings
 void DumpTfbBindings()
 {
 	char buf[512];
@@ -692,8 +860,8 @@ void DumpTfbBindings()
 	FileWriter writer = FileWriter("tfbbindings.xml");
 	writer.WriteText(14, "<tfbbindings>\n");
 
-	_igReportPrintf("handle num is %d\n", handleCount);
-	_igReportPrintf("handle hash item count is %d\n", igObjectHandleManagerInstance->_handleTable->_hashItemCount);
+	DEBUGPRINTF("handle num is %d\n", handleCount);
+	DEBUGPRINTF("handle hash item count is %d\n", igObjectHandleManagerInstance->_handleTable->_hashItemCount);
 	for (int i = 0; i < handleCount; i++)
 	{
 		Core::igHandle handle = handles->get(i);
@@ -733,7 +901,7 @@ void DumpTfbBindings()
 
 	writer.WriteText(15, "</tfbbindings>\n");
 }
-#endif // TARGET_GAME >= SKYTT_01_00_00 && TARGET_GAME <= SKYTT_01_01_00
+#endif // IS_GAME(SKYSA) || IS_GAME(SKYTT) || IS_GAME(SKYSA_WIIU) 
 
 void MetadataDumperThread()
 {
@@ -772,11 +940,11 @@ void MetadataDumperThread()
 	DumpMetaFieldList();
 #endif // TARGET_GAME > SKYSA_END
 
-#if IS_GAME(SKYSA) || IS_GAME(SKYTT)
+#if IS_GAME(SKYSA) || IS_GAME(SKYTT) || IS_GAME(SKYSA_WIIU) 
 	DumpTfbBindings();
-#endif // IS_GAME(SKYSA) || IS_GAME(SKYTT)
+#endif // IS_GAME(SKYSA) || IS_GAME(SKYTT) || IS_GAME(SKYSA_WIIU) 
 
 	StopMetaenumDumping();
 
-	_igReportPrintf("all done!\n");
+	_igReportPrintf("\nall done!\n");
 }
